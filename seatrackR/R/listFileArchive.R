@@ -29,7 +29,8 @@ listFileArchive <- function(){
                       dirlistonly = TRUE,
                       use_ssl = T,
                       ssl_verifyhost = F,
-                      ssl_verifypeer = F)
+                      ssl_verifypeer = F,
+                      sslversion = 6L)
 
   con <- curl::curl(url = dest, "r", handle = list_files)
 

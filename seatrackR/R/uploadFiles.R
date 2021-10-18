@@ -65,10 +65,12 @@ uploadFiles <- function(files = NULL,
 
     mess  <- lapply(getUrl, factory(function(x){
       httr::with_config(httr::config(ssl_verifypeer = F,
-                                                    ssl_verifyhost = F,
-                                                    use_ssl = T,
-                                                    upload = T,
-                                                    filetime = F), httr::PUT(getUrl, body = filePkg))
+                                     ssl_verifyhost = F,
+                                     use_ssl = T,
+                                     upload = T,
+                                     filetime = F,
+                                     sslversion = 6L),
+                        httr::PUT(getUrl, body = filePkg))
       }))
 
 

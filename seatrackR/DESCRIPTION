@@ -1,7 +1,7 @@
 Package: seatrackR
 Title: Interface functions for the Seatrack database
-Version: 0.0.2.25
-Date: 2021-01-06
+Version: 0.0.2.26
+Date: 2021-10-18
 Authors@R: person("Jens", "Astrom", email = "jens.astrom@nina.no", role = c("aut", "cre"))
 Description: R utility functions for interaction with the seatrack database. Of
     interest only to the project group.

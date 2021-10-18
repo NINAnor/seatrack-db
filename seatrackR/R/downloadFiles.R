@@ -51,8 +51,9 @@ downloadFiles <- function(files = NULL,
 
        mess  <- lapply(getUrl, seatrackR:::factory(function(x){
          rawOut <- httr::with_config(httr::config(ssl_verifypeer = F,
-                                                   ssl_verifyhost = F,
-                                                   use_ssl = T),
+                                                  ssl_verifyhost = F,
+                                                  use_ssl = T,
+                                                  sslversion = 6L),
                                       httr::GET(url = x, handle = getHandle))
          assign("rawOut", rawOut, envir = tempEnv)
          }))

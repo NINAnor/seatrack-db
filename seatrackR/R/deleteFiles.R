@@ -56,6 +56,7 @@ deleteFiles <- function(files = NULL, force = F, ...){
                                    dirlistonly = T,
                                    customrequest = paste0("DELE ", x),
                                    filetime = F,
+                                   sslversion = 6L,
                                    ...),
                       httr::POST(url = dest, handle = getHandle))
 
