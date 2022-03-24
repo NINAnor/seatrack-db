@@ -106,7 +106,7 @@ getRecordings2 <- function(type = NULL,
     sessionFilter <- paste0("(", sessionFilter, ")")
 
     stub_q <- paste0(stub_q,
-                     "\nAND session_id IN ",
+                     "\nAND rec.session_id IN ",
                      sessionFilter)
 
   }
@@ -115,10 +115,10 @@ getRecordings2 <- function(type = NULL,
   if(!is.null(individId)){
     individFilter <- paste0("'", individId, sep = "',", collapse = "")
     individFilter <- stringr::str_sub(individFilter,1,nchar(individFilter)-1)
-    individFilter <- paste0("(", individFilter, ")")
+    individFilter <- paste0("(", rec.individFilter, ")")
 
     stub_q <- paste0(stub_q,
-                     "\nAND individ_id IN ",
+                     "\nAND rec.individ_id IN ",
                      individFilter)
   }
 
@@ -128,7 +128,7 @@ getRecordings2 <- function(type = NULL,
     colonyFilter <- paste0("(", colonyFilter, ")")
 
     stub_q <- paste0(stub_q,
-                     "\nAND colony IN ",
+                     "\nAND ls.colony IN ",
                      colonyFilter)
   }
 
@@ -138,7 +138,7 @@ getRecordings2 <- function(type = NULL,
     speciesFilter <- paste0("(", speciesFilter, ")")
 
     stub_q <- paste0(stub_q,
-                     "\nAND species IN ",
+                     "\nAND ls.species IN ",
                      speciesFilter)
   }
 
@@ -154,7 +154,10 @@ getRecordings2 <- function(type = NULL,
 
   query <- paste( "\\copy (", stub_q, ") To '/data/scratch/temp_seatrack.csv' With CSV DELIMITER ',' HEADER")
 
-  system_call <- paste0("export PGPASSWORD='testreader';\n", "psql -h seatrack.nina.no -d seatrack -U testreader -c \"", query, "\" 2>&1")
+  pass <- get(".pass", envir = as.environment(passEnv))
+  user <- get(".user", envir = as.environment(passEnv))
+
+  system_call <- paste0("export PGPASSWORD='", pass,"';\n", "psql -h seatrack.nina.no -d seatrack -U ", user, " -c \"", query, "\" 2>&1")
 
   #Run the query
   cat("Running the query...")
