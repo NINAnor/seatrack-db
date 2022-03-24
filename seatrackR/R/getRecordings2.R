@@ -179,6 +179,7 @@ getRecordings2 <- function(type = NULL,
   # }
   #
 
+  system("rm /data/scratch/temp_seatrack.csv")
 
   return(res)
 }
