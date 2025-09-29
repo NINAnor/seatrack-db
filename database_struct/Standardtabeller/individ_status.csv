@@ -1,8 +1,0 @@
-logger_id,weight,scull,tarsus,wing,breeding_stage,eggs,chicks,hatching_success,breeding_success,breeding_success_criterion,data_responsible,back_on_nest,comment,location
-1,,,,,nonbreeding/failed_breeder,,,0,0,10d,,,,
-2,,,,,prebreeding,,,1,,15d,,,,
-3,,,,,incubating,,,1,,20d,,,,
-4,,,,,rearing chicks,,,1,1,25d,,,,
-5,,,,,breeding/stage_unknown,,,,,30d,,,,
-6,,,,,failed breeder,,,1,0,fledging,,,,
-7,,,,,unknown,,,,,none,,,,

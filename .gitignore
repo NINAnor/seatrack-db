@@ -1,24 +1,4 @@
-.Rproj.user
-.Rhistory
-.RData
-shiny/shinyPass.Rdata
-.Ruserdata
-~$*
-old/*
-Rscripts/*
-*.laccdb
-sql/
-thumbs.db
-Vegard_DB_relatedscript.R
-database_struct/file_storage
-database_struct/temp
-database_struct/Standardtabeller/*.rds
-seatrackR/.Rproj.user
-seatrackR/.Rhistory
-seatrackR/.RData
-seatrackR/.Rdata
-seatrackR/temp
-*.tar.gz
-temp/
+Meta
 
 
+../temp/
