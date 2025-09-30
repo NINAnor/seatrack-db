@@ -6,28 +6,44 @@
 
 upstartVersion <- function(){
 
-  pkg = "seatrackR"
+  package_name <- environmentName(environment(checkCon))
 
   installed_version <- tryCatch(packageVersion(gsub(".*/",
-                                                    "", pkg)), error = function(e) NA)
+                                                    "", package_name)), error = function(e) NA)
 
-  url <- "https://raw.githubusercontent.com/NINAnor/seatrack-db/master/seatrackR/DESCRIPTION"
-  x <- readLines(url)
+  doc_url <- utils::packageDescription(package_name)$URL
+
+  # Get github host from doc_url, first workd after // and before first .
+  host <- gsub("^(.*//)([^.]*)\\..*$", "\\2", doc_url)
+
+  # Get repository name from doc_url
+  repo <- regmatches(doc_url, regexec(".*/([^/]+)/[^/]*/*$", doc_url))[[1]][2]
+
+  #Get package URL
+  description_url <- paste0("https://raw.githubusercontent.com/", host, "/", repo,"/master/seatrackR/DESCRIPTION")
+  
+  # Read the lines
+  x <- readLines(description_url)
 
   remote_version <- gsub("(Version: )(.*)", "\\2", grep("Version:", x, value = T))
 
 
-  res <- list(package = pkg, installed_version = installed_version,
+  res <- list(package = package_name, installed_version = installed_version,
               latest_version = remote_version, up_to_date = NA)
 
+  if (is.na(installed_version)) {
+    return(res)
+  }
+
   if (remote_version > installed_version) {
-    msg <- paste("##", pkg, "is out of date, latest version is",
+    msg <- paste("##", package_name, "is out of date, latest version is",
                  remote_version)
     message(msg)
     res$up_to_date <- FALSE
 
 
   }
+  return(res)
 }
 
 #upstartVersion
