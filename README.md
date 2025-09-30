@@ -18,5 +18,5 @@ Installation
 Install the package by
 
 ```
-devtools::install_github("NINAnor/seatrack-db/seatrackRdb", build_vignettes = T)
+devtools::install_github("NINAnor/seatrack-db", build_vignettes = T)
 ```
