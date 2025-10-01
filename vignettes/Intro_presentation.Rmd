@@ -62,7 +62,7 @@ options(width = 80)
 * This presentation only covers working with the database through R
 
 
-## R-package "seatrackR"
+## R-package "seatrackRdb"
 
 ```{r, echo=F, results = 'asis'}
 cat("\\scriptsize")
@@ -331,7 +331,7 @@ p
 
 ## Working with the database through the R-package
 
-* Several other custom R functions exists, see help(package = "seatrackR") for an overview. Look also at the vignettes
+* Several other custom R functions exists, see help(package = "seatrackRdb") for an overview. Look also at the vignettes
     - For example: `getIndividInfo`, `getLoggerInfo`
 * Several functions for the few users that imports data
 

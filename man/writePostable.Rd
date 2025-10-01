@@ -16,7 +16,7 @@ Data frame.
 This is a convenience function that writes to the "positions.postable" table, the main table for the position data.
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 
  files<-c("posdata_FULGLA_eynhallow_2014",

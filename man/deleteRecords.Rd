@@ -34,7 +34,7 @@ This is a convenience function that deletes records from the logging_session tab
 (individ info and status, deployment and retrieval info, startup and shutdown tables, and file archive).
 }
 \examples{
-dontrun{
+\dontrun{
 deleteRecords(selectUpdateTime = "2018-04-20")
 }
 }

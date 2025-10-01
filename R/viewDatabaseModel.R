@@ -6,7 +6,7 @@
 #' @return Opens a internet browser window with the database model.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' viewDatabaseModel()
 #' }
 #'
@@ -14,5 +14,5 @@
 viewDatabaseModel <- function(type = c("png", "svg")){
   type <- match.arg(type, c("png", "svg"))
 
-  browseURL(system.file("img", paste0("seatrackModel.", type), package = "seatrackR"))
+  browseURL(system.file("img", paste0("seatrackModel.", type), package = "seatrackRdb"))
 }

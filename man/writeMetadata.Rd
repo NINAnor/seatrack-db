@@ -21,7 +21,7 @@ Together with the table logger_import, this table handles all the routine inform
 and the fieldwork.
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 writeMetadata(sampleMetadata)
 }

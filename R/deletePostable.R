@@ -7,7 +7,7 @@
 #'
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' connectSeatrack(Username = "testreader", Password = "testreader")
 #' delFiles<-c("posdata_FULGLA_eynhallow_2015")
 #' deletePostable(delFiles)
@@ -16,7 +16,7 @@
 
 
 deletePostable <- function(delFiles){
-  seatrackR:::checkCon()
+  checkCon()
 
   filesInPostable <- list()
     for(i in 1:length(delFiles)){

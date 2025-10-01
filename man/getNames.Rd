@@ -13,7 +13,7 @@ A tibble of the people id, names and abbreviated names registered in the people 
 The database only accepts people names that are registered in the "metadata.people" table. This should contain all people that are relevant to the project.
 }
 \examples{
-dontrun{
+\dontrun{
 getNames()
 }
 }

@@ -39,7 +39,7 @@ This is a collection of functions to check the integrity of the metadata table b
 
 }}
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 myCheck <- checkMetadata(sampleMetadata)
 plot(myCheck) #quickly see how many problems there are

@@ -8,7 +8,7 @@
 #' @return Status messages on the actions taken for each file.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' ##To download all files in the file storage
 #' myFiles = listFileArchive()$filesInArchive
 #' loadedFile <- loadFile(filename = myFiles[1,])
@@ -23,13 +23,13 @@
 loadFile <- function(filename = NULL,
                      delim = ",",
                      ...){
-  seatrackR:::checkCon()
+  checkCon()
 
   if(length(filename) != 1){
     stop("Need a single filename to load.")
     }
 
-    url <- seatrackR:::.getFtpUrl()
+    url <- .getFtpUrl()
 
     tmp <- strsplit(url$url, "//")
     getUrl <- paste0(tmp[[1]][1], "//", url$pwd, "@", tmp[[1]][2],"/" , filename)

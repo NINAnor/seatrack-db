@@ -12,7 +12,7 @@ inserts or updates to postable, but this was time consuming, possibly because it
 to be updated manually, for example by using this function. Beware that it takes more than 30 minutes to complete.
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 updatePosdataSession()
 }

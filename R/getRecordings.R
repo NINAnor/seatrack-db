@@ -13,7 +13,7 @@
 #' @return A Lazy query or optionally a Tibble.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' connectSeatrack(Username = "testreader", Password = "testreader")
 #' getRecordings(type = "temperature",
 #'              colony = "Sklinna")
@@ -27,7 +27,7 @@ getRecordings <- function(type = NULL,
                           species = NULL,
                           yearTracked = NULL,
                           asTibble = T){
-  seatrackR:::checkCon()
+  checkCon()
 
   type <- match.arg(type, choices = c("light", "temperature", "activity"))
 

@@ -6,7 +6,7 @@
 #' @return Status messages on the actions taken for each file.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' ##To download all files in the file archive.
 #' myFiles = listFileArchive()$filesInArchive
 #' downloadFiles(files = myFiles, destFolder = "temp")
@@ -17,7 +17,7 @@
 downloadFiles <- function(files = NULL,
                           destFolder = NULL,
                           overwrite = F){
-  seatrackR:::checkCon()
+  checkCon()
 
   if(!tibble::is_tibble(files)) files <- tibble::tibble(filename = files)
 
@@ -26,7 +26,7 @@ downloadFiles <- function(files = NULL,
   notThere <- files$filename[!(files$filename %in% archive$filesInArchive$filename)]
   if(length(notThere) > 0) stop(c("Requested files are not in archive: \n", paste(notThere, "\n")))
 
-  url <- seatrackR:::.getFtpUrl()
+  url <- .getFtpUrl()
 
   tempEnv <- new.env(parent = as.environment("package:seatrackR"))
 
@@ -49,7 +49,7 @@ downloadFiles <- function(files = NULL,
 
 
 
-       mess  <- lapply(getUrl, seatrackR:::factory(function(x){
+       mess  <- lapply(getUrl, factory(function(x){
          rawOut <- httr::with_config(httr::config(ssl_verifypeer = F,
                                                    ssl_verifyhost = F,
                                                    use_ssl = T),

@@ -5,7 +5,7 @@
 #' @return A tibble of the metadata.subspecies table
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' getSpecies()
 #' }
 

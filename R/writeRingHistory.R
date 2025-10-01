@@ -12,7 +12,7 @@
 #' @return Data frame.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' connectSeatrack(Username = "testreader", Password = "testreader")
 #' writeRingHistory(sampleRingHistory)
 #' }

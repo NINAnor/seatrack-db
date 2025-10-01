@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' pruneRecords()
 #'
 #' }
@@ -24,7 +24,7 @@ pruneRecordings <- function(
     ){
 
 
-  seatrackR:::checkCon()
+  checkCon()
 
 
   pruneLightQ <- "

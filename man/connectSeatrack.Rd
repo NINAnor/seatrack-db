@@ -43,7 +43,7 @@ For example, I don't know what would happen if R would crash and store something
 Seatrack, that you don't share with other sites or applications.
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 DBI::dbGetQuery(con, "SELECT * FROM loggers.logging_session LIMIT 10")
 DBI::dbDisconnect(con)

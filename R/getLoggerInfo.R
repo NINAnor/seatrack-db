@@ -7,13 +7,13 @@
 #' @return Lazy query or optionally a Tibble.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' connectSeatrack(Username = "testreader", Password = "testreader")
 #' loggerInfo <- getLoggerInfo()
 #' }
 
 getLoggerInfo <- function(asTibble = T){
-  seatrackR:::checkCon()
+  checkCon()
 
   res <-dplyr::tbl(con, dbplyr::in_schema("views", "logger_info"))
 

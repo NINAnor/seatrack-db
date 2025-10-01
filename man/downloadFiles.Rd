@@ -13,7 +13,7 @@ Status messages on the actions taken for each file.
 Download files from the file archive
 }
 \examples{
-dontrun{
+\dontrun{
 ##To download all files in the file archive.
 myFiles = listFileArchive()$filesInArchive
 downloadFiles(files = myFiles, destFolder = "temp")

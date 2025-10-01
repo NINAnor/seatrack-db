@@ -13,7 +13,7 @@ Data frame.
 This is a convenience function that pulls together various info on the files in the loggers.file_archive table and other tables
 }
 \examples{
-dontrun{
+\dontrun{
 seatrackConnect(Username = "testreader", Password = "testreader")
 fileArchive <- getFileArchive()
 }

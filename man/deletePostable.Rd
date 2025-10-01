@@ -14,7 +14,7 @@ This is a convenience function that deletes rows from the "positions.postable" t
 USE THIS WITH CAUTION!
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 delFiles<-c("posdata_FULGLA_eynhallow_2015")
 deletePostable(delFiles)

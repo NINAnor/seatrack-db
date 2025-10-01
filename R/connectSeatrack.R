@@ -22,7 +22,7 @@
 #' For example, I don't know what would happen if R would crash and store something in a crash logfile. So best practice would be to use a separate password for
 #' Seatrack, that you don't share with other sites or applications.
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' connectSeatrack(Username = "testreader", Password = "testreader")
 #' DBI::dbGetQuery(con, "SELECT * FROM loggers.logging_session LIMIT 10")
 #' DBI::dbDisconnect(con)

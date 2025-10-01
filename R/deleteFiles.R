@@ -5,7 +5,7 @@
 #' @return Status messages on the actions taken for each file.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #'
 #' deleteFiles(files = c("test.txt", "test_file2.txt"), originFolder = "temp")
 #' }
@@ -38,7 +38,7 @@ deleteFiles <- function(files = NULL, force = F, ...){
 
   fileArchive <- listFileArchive()
 
-  url <- seatrackR:::.getFtpUrl()
+  url <- .getFtpUrl()
 
 
   deleteFile <- function(x, url, ...){

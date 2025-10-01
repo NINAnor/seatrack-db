@@ -5,7 +5,7 @@
 #' @return Status messages on the actions taken for each file.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #'
 #' uploadFiles(files = c("test_file.txt", "test_file2.txt"), originFolder = "temp")
 #' }
@@ -18,7 +18,7 @@ uploadFiles <- function(files = NULL,
                         ...){
   #Verbose doesn't work
 
-  seatrackR:::checkCon()
+  checkCon()
 
   current_user <- DBI::dbGetQuery(con, "SELECT current_user")
 
@@ -41,7 +41,7 @@ uploadFiles <- function(files = NULL,
   } else {
 
 
-    url <- seatrackR:::.getFtpUrl()
+    url <- .getFtpUrl()
 
     writeFile <- function(x,
                           url,
@@ -65,7 +65,7 @@ uploadFiles <- function(files = NULL,
         getHandle <- httr::handle(getUrl)
         filePkg <- httr::upload_file(filename)
 
-        mess  <- lapply(getUrl, seatrackR:::factory(function(x){
+        mess  <- lapply(getUrl, factory(function(x){
 
           RCurl::ftpUpload(what = filename,
                            to = getUrl,

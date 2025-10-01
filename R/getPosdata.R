@@ -22,7 +22,7 @@
 #' @import dplyr
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' connectSeatrack(Username = "testreader", Password = "testreader")
 #'
 #' positions <- getPosdata(colony = "Kongsfjorden",
@@ -55,7 +55,7 @@ getPosdata <- function(species= NULL,
                        asTibble = T,
                        limit = F){
 
-  seatrackR:::checkCon()
+  checkCon()
 
   selectSpecies <- species
   selectColony <- colony

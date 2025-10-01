@@ -5,14 +5,14 @@
 #' @return Data frame.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' seatrackConnect(Username = "testreader", Password = "testreader")
 #' fileArchive <- getFileArchive()
 #' }
 
 getFileArchiveSummary <- function(colony = NULL,
                            year = NULL){
-  seatrackR:::checkCon()
+  checkCon()
 
   res <- DBI::dbGetQuery(con,
   "SELECT f.file_id, f.session_id, ls.colony, ii.ring_number, ii.euring_code, ls.year_tracked, li.logger_serial_no, li.logger_model, f.filename
@@ -39,7 +39,7 @@ return(res)
 getFileArchiveSummary2 <- function(colony = NULL,
                                    year = NULL){
 
-  seatrackR:::checkCon()
+  checkCon()
 
   fileQ <- "SELECT li.logger_id, li.logger_serial_no, li.logger_model, ls.year_tracked, date_part('year', r.retrieval_date) as year_retrieved,
   s.logging_mode, ii.ring_number, ii.euring_code, ls.colony, d.deployment_date as date_deployed, r.retrieval_date date_retrieved,

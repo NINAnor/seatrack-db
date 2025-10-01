@@ -36,7 +36,7 @@ A Lazy query or optionally a Tibble.
 This is a convenience function that reads from the "activity" tables temperature, activity, and light in the schema Recordings
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 getRecordings(type = "temperature",
              colony = "Sklinna")

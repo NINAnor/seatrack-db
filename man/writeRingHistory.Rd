@@ -23,7 +23,7 @@ This is a convenience function that writes to the "individuals.ring_history".
 It is very important to store backups of this table outside the database! This is the memory of the history of the ring numbers and might need to be reimported if the database has been scratched!
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 writeRingHistory(sampleRingHistory)
 }

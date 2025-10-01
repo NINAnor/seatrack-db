@@ -25,7 +25,7 @@ upstartVersion <- function(){
   # Read the lines
   x <- readLines(description_url)
 
-  remote_version <- gsub("(Version: )(.*)", "\\2", grep("Version:", x, value = T))
+  remote_version <- gsub("(Version: )(.*)", "\\2", grep("Version:", x, value = TRUE))
 
 
   res <- list(package = package_name, installed_version = installed_version,

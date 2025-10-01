@@ -13,7 +13,7 @@ A tibble of the years represented in the database
 This lists the available years and the abbreviation used to identify them, for example in the postable.
 }
 \examples{
-dontrun{
+\dontrun{
 getYears()
 }
 }

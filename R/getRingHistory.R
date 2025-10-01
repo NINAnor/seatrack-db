@@ -6,13 +6,13 @@
 #' @return Lazy query, or optionally a tibble
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' getRingHistory()
 #' }
 
 
 getRingHistory <- function(asTibble = F){
-  seatrackR:::checkCon()
+  checkCon()
 
   res <- dplyr::tbl(con, dbplyr::in_schema("individuals", "ring_history"))  %>% select(-id)
 

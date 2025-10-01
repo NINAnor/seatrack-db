@@ -13,7 +13,7 @@ Data frame.
 This is a convenience function that pulls together various info on the files in the individuals.individ_info and individuals.individ_status table and other tables
 }
 \examples{
-dontrun{
+\dontrun{
 seatrackConnect(Username = "testreader", Password = "testreader")
 individInfo <- getInfividInfo()
 }

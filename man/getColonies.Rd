@@ -19,7 +19,7 @@ This function either reads from the metadata.colony or the metadata.location tab
 If
 }
 \examples{
-dontrun{
+\dontrun{
 colony <- getColonies(loadGeometries = T)
 plot(colony["colony_int_name"],
 pch = 16)

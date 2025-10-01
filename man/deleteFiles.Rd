@@ -13,7 +13,7 @@ Status messages on the actions taken for each file.
 deleteFiles
 }
 \examples{
-dontrun{
+\dontrun{
 
 deleteFiles(files = c("test.txt", "test_file2.txt"), originFolder = "temp")
 }

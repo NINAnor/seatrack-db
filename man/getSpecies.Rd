@@ -13,7 +13,7 @@ A tibble of the metadata.subspecies table
 Retrieve info on the registered species in the database
 }
 \examples{
-dontrun{
+\dontrun{
 getSpecies()
 }
 }

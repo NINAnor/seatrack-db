@@ -8,7 +8,7 @@
 #' @return A list.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' listFileArchive()
 #' }
 #' @seealso \code{\link{getFileArchive}} for a function that summarizes info on the files that should be in the file archive (connected to loggers that have been shut down). )
@@ -18,7 +18,7 @@ listFileArchive <- function(){
   checkCon()
 
   ##Get files in archive, using curl instead of RCurl
-  url <- seatrackR:::.getFtpUrl()
+  url <- .getFtpUrl()
   tmp <- strsplit(url$url, "//")
   dest <- paste0(tmp[[1]][1], "//", url$pwd, "@", tmp[[1]][2])
 

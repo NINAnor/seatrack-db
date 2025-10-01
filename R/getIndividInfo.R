@@ -5,7 +5,7 @@
 #' @return Data frame.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' seatrackConnect(Username = "testreader", Password = "testreader")
 #' individInfo <- getInfividInfo()
 #' }
@@ -15,7 +15,7 @@
 getIndividInfo <- function(colony = NULL,
                            year = NULL){
 
-  seatrackR:::checkCon()
+  checkCon()
   selectColony <- colony
   selectYear <- year
 

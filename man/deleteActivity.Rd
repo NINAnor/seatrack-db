@@ -33,7 +33,7 @@ Status message
 This is a convenience function that deletes records from the activity tables (records.activity, records.light, records.temp)
 }
 \examples{
-dontrun{
+\dontrun{
 deleteActivity(selectUpdateTime = "2018-04-20")
 }
 }

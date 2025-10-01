@@ -17,7 +17,7 @@ This is a convenience function that reads from the view "views.logger_info". Not
 #'
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 loggerInfo <- getLoggerInfo()
 }

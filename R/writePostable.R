@@ -6,7 +6,7 @@
 #' @return Data frame.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' connectSeatrack(Username = "testreader", Password = "testreader")
 #'
 #'  files<-c("posdata_FULGLA_eynhallow_2014",
@@ -28,7 +28,7 @@
 
 
 writePostable <- function(positionData){
-  seatrackR:::checkCon()
+  checkCon()
 
   nRowsToImport <- sum(unlist(lapply(positionData, nrow)))
 

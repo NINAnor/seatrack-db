@@ -14,7 +14,7 @@ This is a convenience function that reads from the view "views.active_logging_se
 sessions marked "active = TRUE"
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 activeSessions <- getActiveSessions()
 }

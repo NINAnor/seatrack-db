@@ -20,7 +20,7 @@ Data frame.
 This is a convenience function that writes to the "individuals.individ_info"
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 writeIndividInfo(sampleIndividInfo)
 }

@@ -13,7 +13,7 @@ Status messages on the actions taken for each file.
 Write files to the file archive
 }
 \examples{
-dontrun{
+\dontrun{
 
 uploadFiles(files = c("test_file.txt", "test_file2.txt"), originFolder = "temp")
 }

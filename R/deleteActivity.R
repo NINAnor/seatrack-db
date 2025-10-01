@@ -13,7 +13,7 @@
 #' @import dplyr
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' deleteActivity(selectUpdateTime = "2018-04-20")
 #' }
 
@@ -28,7 +28,7 @@ deleteActivity <- function(colony = NULL,
                           sessionId = NULL,
                           force = FALSE){
 
-  seatrackR:::checkCon()
+  checkCon()
 
 #append dummy condition to ease later conditions
 deleteTemp<- "DELETE FROM recordings.temperature

@@ -13,7 +13,7 @@ Lazy query, or optionally a tibble
 Read from the table of the history of ring numbers for birds that have had their rings changed.
 }
 \examples{
-dontrun{
+\dontrun{
 getRingHistory()
 }
 }

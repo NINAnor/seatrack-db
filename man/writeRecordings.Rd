@@ -30,7 +30,7 @@ Data frame.
 This is a convenience function that writes to the light, temperature or the activity table in schema Recordings
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 writeRecordings(lightData = sampleLightData)
 }

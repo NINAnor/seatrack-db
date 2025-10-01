@@ -10,13 +10,13 @@
 #' @return NULL
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' connectSeatrack(Username = "testreader", Password = "testreader")
 #' updatePosdataSession()
 #' }
 
 updateViews <- function(){
-  seatrackR:::checkCon()
+  checkCon()
 
 
   current_user <- DBI::dbGetQuery(con, "SELECT current_user")

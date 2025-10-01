@@ -20,7 +20,7 @@ Data frame.
 This is a convenience function that writes to the "loggers.logger_info"
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 writeLoggerImport(sampleLoggerImport)
 

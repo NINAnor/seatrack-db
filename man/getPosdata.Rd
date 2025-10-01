@@ -51,7 +51,7 @@ This is a convenience function that reads from the table "positions.postable".
 This table contains the primary positions data.
 }
 \examples{
-dontrun{
+\dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
 
 positions <- getPosdata(colony = "Kongsfjorden",

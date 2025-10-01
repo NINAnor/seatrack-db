@@ -9,7 +9,7 @@
 #' @return A tibble of the metadata.colony or metadata.location table with or without sf geometry.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' colony <- getColonies(loadGeometries = T)
 #' plot(colony["colony_int_name"],
 #' pch = 16)

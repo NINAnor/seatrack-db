@@ -27,7 +27,7 @@ Status message
 Delete activity, light and temperature recording data that is lacking an existing session_id in the loggers.logger_session table. #'
 }
 \examples{
-dontrun{
+\dontrun{
 pruneRecords()
 
 }

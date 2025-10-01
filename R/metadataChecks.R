@@ -8,7 +8,7 @@
 #' @return Various errors.
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' connectSeatrack(Username = "testreader", Password = "testreader")
 #' myCheck <- checkMetadata(sampleMetadata)
 #' plot(myCheck) #quickly see how many problems there are

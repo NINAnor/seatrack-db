@@ -13,7 +13,7 @@ Opens a internet browser window with the database model.
 Zoom in with the browser to see the details
 }
 \examples{
-dontrun{
+\dontrun{
 viewDatabaseModel()
 }
 

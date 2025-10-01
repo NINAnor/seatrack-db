@@ -5,7 +5,7 @@
 #' @return A tibble of the years represented in the database
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' getYears()
 #' }
 

@@ -14,7 +14,7 @@
 #' @import dplyr
 #' @export
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' deleteRecords(selectUpdateTime = "2018-04-20")
 #' }
 
@@ -29,7 +29,7 @@ deleteRecords <- function(colony = NULL,
                           sessionId = NULL,
                           force = FALSE){
 
-  seatrackR:::checkCon()
+  checkCon()
 
 
 
