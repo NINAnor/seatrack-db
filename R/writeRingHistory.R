@@ -22,10 +22,10 @@ writeRingHistory <- function(historyData,
                              append = T){
   checkCon()
   DBI::dbWithTransaction(
-    con,
+    the$con,
     {
-      DBI::dbSendQuery(con, "SET search_path TO individuals, public")
-      DBI::dbWriteTable(con, "ring_history",
+      DBI::dbSendQuery(the$con, "SET search_path TO individuals, public")
+      DBI::dbWriteTable(the$con, "ring_history",
                         historyData,
                         append = append)
     }

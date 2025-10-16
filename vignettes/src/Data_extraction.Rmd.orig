@@ -1,14 +1,17 @@
 ---
 title: "Retrieve standard data from Seatrack"
 author: "Jens Åström"
-date: "2025-10-10"
+date: "`r Sys.Date()`"
 vignette: >
   %\VignetteIndexEntry{Data extraction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(tidyverse)
+```
 
 Connecting to the database
 =======
@@ -20,8 +23,7 @@ This instruction deals with the preferred way of connecting to the database, usi
 To simplify the connection, use the convenience function `connectSeatrack`. This creates a connection named `con` by using the packages `DBI` and `RPostgres`.
 
 
-
-``` r
+```{r}
 require(seatrackRdb)
 
 connectSeatrack(Username =  "testreader", Password = "testreader")
@@ -34,26 +36,15 @@ As of now, 4 functions exist to retreive data from the database through prebuilt
 
 It is perfecty fine to download data through your own custom queries. Creating interesting queries requires some knowledge about the structure of the database however. Pgadmin3(4) would be a useful tool to get further info on that. For now, we show a simple query involving just one table. Here we get the different locations currently recorded from the Faroe Islands (Coordinates not updated).  Note that you have to load the `DBI` package and use its query functions.
 
-
-``` r
+```{r}
 require(DBI)
 
 myQuery <- "SELECT * from metadata.location
               WHERE colony_int_name = 'Faroe Islands'"
 
 faroeLocations <- dbGetQuery(the$con, myQuery)
-```
-
-```
-## Error in h(simpleError(msg, call)): error in evaluating the argument 'conn' in selecting a method for function 'dbGetQuery': object 'the' not found
-```
-
-``` r
 head(faroeLocations)
-```
 
-```
-## Error: object 'faroeLocations' not found
 ```
 
 
@@ -63,32 +54,16 @@ The primary data of the positions of the birds is stored in the table `positions
 
 The `getPosdata` function retrieves this table, with options to subselect only specific species, colonies, responsible contact person, specific ring numbers, and years. There is also an option to limit the records to a set number of rows, and to load the position coordinates as a spatial object.
 
+```{r}
 
-``` r
 eynhallowPositions <- getPosdata(selectColony = "Eynhallow",
                                  loadGeometries = T)
-```
-
-```
-## Error in getPosdata(selectColony = "Eynhallow", loadGeometries = T): unused argument (selectColony = "Eynhallow")
-```
-
-``` r
 eynhallowPositions
 ```
 
-```
-## Error: object 'eynhallowPositions' not found
-```
 
-
-
-``` r
+```{r}
 plot(eynhallowPositions["ring_number"])
-```
-
-```
-## Error: object 'eynhallowPositions' not found
 ```
 
 
@@ -96,8 +71,7 @@ Position data for export
 ==================
 The data sent to the Polar institute also have the subspecies names added to the records. The export ready positions data can be retrieved most easily through a specific export view. Note that this will download all records, and will take some time. Note that this export does not contain information on the used and deleted uuids. 
 
-
-``` r
+```{r, eval = F}
 newExport <- dbReadTable(the$con, Id(schema = "views", table = "export"))
 nrow(newExport)
 write.csv(newExport, file = "seatrack_export_2018-08-09.csv")
@@ -105,11 +79,11 @@ write.csv(newExport, file = "seatrack_export_2018-08-09.csv")
 
 If you are interested in knowing separate old, deleted rows, these are found in the table `positions.deleted_uuid`.
 
-
-``` r
+```{r, eval = F}
 deletedUuids <- dbReadTable(the$con, Id(schema = "positions", table =  "deleted_uuid"))
 nrow(deletedUuids)
 write.csv(deletedUuids, file = "deletedUuids_2018-08-09.csv")
+
 ```
 
 
@@ -121,21 +95,9 @@ The `getFileArchiveSummary` function
 --------------
 This function pulls together data from several tables with focus on the file archive. It should contain enough information to know what the individual raw files contain.
 
-
-``` r
+```{r}
 eynhallowFiles <- getFileArchiveSummary(selectColony = "Eynhallow")
-```
-
-```
-## Error in getFileArchiveSummary(selectColony = "Eynhallow"): unused argument (selectColony = "Eynhallow")
-```
-
-``` r
 eynhallowFiles
-```
-
-```
-## Error: object 'eynhallowFiles' not found
 ```
 
 
@@ -143,33 +105,16 @@ The `getIndividInfo` function
 -------------
 This function summarizes all observation data for the individual birds. We can subselect the colony and year interval the bird where tracked.
 
-
-``` r
+```{r}
 hornoyaIndivids <- getIndividInfo(selectColony = "Hornoya",
                                     selectYear = "2014_15")
-```
-
-```
-## Error in getIndividInfo(selectColony = "Hornoya", selectYear = "2014_15"): unused arguments (selectColony = "Hornoya", selectYear = "2014_15")
-```
-
-``` r
 hornoyaIndivids
-```
-
-```
-## Error: object 'hornoyaIndivids' not found
 ```
 
 !Note the weird duplicate records here! **TO BE FIXED**
 
-
-``` r
+```{r}
 hornoyaIndivids %>% print(width = Inf)
-```
-
-```
-## Error: object 'hornoyaIndivids' not found
 ```
 
 
@@ -177,37 +122,13 @@ Commonly used info
 -------------
 I have made a couple of views for som common information, that are displayed on the shiny app http://view.nina.no/seatrack/. These can be found like this as well.
 
-
-``` r
+```{r}
 shorttable <- dbReadTable(the$con, Id(schema = "views", table = "shorttable"))
-```
-
-```
-## Error in h(simpleError(msg, call)): error in evaluating the argument 'conn' in selecting a method for function 'dbReadTable': object 'the' not found
-```
-
-``` r
 shorttable
 ```
-
-```
-## Error: object 'shorttable' not found
-```
-
-``` r
+```{r}
 shorttableeqfilter3 <- dbReadTable(the$con, Id(schema = "views", table = "shorttableeqfilter3"))
-```
-
-```
-## Error in h(simpleError(msg, call)): error in evaluating the argument 'conn' in selecting a method for function 'dbReadTable': object 'the' not found
-```
-
-``` r
 shorttableeqfilter3
-```
-
-```
-## Error: object 'shorttableeqfilter3' not found
 ```
 
 

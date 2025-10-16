@@ -15,12 +15,12 @@
 getLoggerInfo <- function(asTibble = T){
   checkCon()
 
-  res <-dplyr::tbl(con, dbplyr::in_schema("views", "logger_info"))
+  res <- dplyr::tbl(the$con, dbplyr::in_schema("views", "logger_info"))
 
   if(asTibble){
     res <- res  %>% dplyr::collect()
 
-    #Forze timezone to be UTC
+    # Forze timezone to be UTC NOT NEEDED
     res <- res %>%
       mutate(starttime_gmt = lubridate::force_tz(starttime_gmt,
                                                  tzone = "UTC"),

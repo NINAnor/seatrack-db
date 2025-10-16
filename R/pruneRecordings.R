@@ -71,21 +71,21 @@ pruneRecordings <- function(
     if(isTRUE(pruneLight)){
       message("Deleting orphaned rows in light table.")
 
-      dbSendStatement(con,
+      dbSendStatement(the$con,
                       pruneLightQ)
     }
 
     if(isTRUE(pruneActivity)){
       message("Deleting orphaned rows in activity table.")
 
-      dbSendStatement(con,
+      dbSendStatement(the$con,
                       pruneActivityQ)
     }
 
     if(isTRUE(pruneTemperature)){
       message("Deleting orphaned rows in temperature table.")
 
-      dbSendStatement(con,
+      dbSendStatement(the$con,
                       pruneTemperatureQ)
     }
 
@@ -100,21 +100,21 @@ pruneRecordings <- function(
       if(isTRUE(pruneLight)){
         message("Deleting orphaned rows in light table.")
 
-        dbSendStatement(con,
+        dbSendStatement(the$con,
                         pruneLightQ)
       }
 
       if(isTRUE(pruneActivity)){
         message("Deleting orphaned rows in activity table.")
 
-        dbSendStatement(con,
+        dbSendStatement(the$con,
                         pruneActivityQ)
       }
 
       if(isTRUE(pruneTemperature)){
         message("Deleting orphaned rows in temperature table.")
 
-        dbSendStatement(con,
+        dbSendStatement(the$con,
                         pruneTemperatureQ)
       }
 

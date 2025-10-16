@@ -20,11 +20,11 @@
 writeMetadata <- function(metadata){
  checkCon()
 
-  DBI::dbSendQuery(con, "SET search_path TO imports, public")
+  DBI::dbSendQuery(the$con, "SET search_path TO imports, public")
   DBI::dbWithTransaction(
-    con,
+    the$con,
     {
-      DBI::dbWriteTable(con, "metadata_import", metadata, append = T, overwrite = F)
+      DBI::dbWriteTable(the$con, "metadata_import", metadata, append = T, overwrite = F)
     }
   )
 }
@@ -34,7 +34,7 @@ writeMetadata <- function(metadata){
 writeMetadata2 <- function(metadata){
  checkCon()
 
-  DBI::dbSendQuery(con, "SET search_path TO imports, public")
+  DBI::dbSendQuery(the$con, "SET search_path TO imports, public")
 
 
     testWrite <- function(myTable) {
@@ -48,7 +48,7 @@ writeMetadata2 <- function(metadata){
 
           message("This is the 'try' part")
 
-          DBI::dbWriteTable(con, "metadata_import", myTable, append = T, overwrite = F)
+          DBI::dbWriteTable(the$con, "metadata_import", myTable, append = T, overwrite = F)
           # The return value of `readLines()` is the actual value
           # that will be returned in case there is no condition
           # (e.g. warning or error).

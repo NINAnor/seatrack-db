@@ -15,7 +15,7 @@
 getActiveSessions <- function() {
   checkCon()
 
-  DBI::dbGetQuery(con, "SELECT * FROM views.active_logging_sessions")  %>%
+  DBI::dbGetQuery(the$con, "SELECT * FROM views.active_logging_sessions")  %>%
     as_tibble()
 }
 

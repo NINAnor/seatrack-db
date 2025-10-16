@@ -6,7 +6,7 @@
 #' @param allLocations True, False. Should all locations within colonies be loaded. Default = False.
 #' @param loadGeometries True, False. Should the geometries be loaded as an sf object. Default = False.
 #'
-#' @return A tibble of the metadata.colony or metadata.location table with or without sf geometry.
+#' @return Either a tibble or a sf dataframe of the metadata.colony or metadata.location table.
 #' @export
 #' @examples
 #' \dontrun{
@@ -16,60 +16,19 @@
 #' }
 
 
-getColonies <- function(allLocations = F,
-                        loadGeometries = F){
+getColonies <- function(allLocations = FALSE, loadGeometries = FALSE){
   checkCon()
 
-  if(allLocations == T &
-   loadGeometries == F){
-
-  locations <- dbReadTable(con, DBI::Id(schema = "metadata", table = "location"))
-  out <- as_tibble(locations) %>%
-    select(location_name,
-           colony_int_name,
-           colony_nat_name)
-  return(out)
+  if (allLocations) {
+    locations <- dbReadTable(the$con, DBI::Id(schema = "metadata", table = "location"))
+  } else {
+    locations <- dbReadTable(the$con, DBI::Id(schema = "metadata", table = "colony"))
   }
 
-  if(allLocations == F &
-     loadGeometries == F){
-
-    locations <- dbReadTable(con, DBI::Id(schema = "metadata", table = "colony"))
-    out <- as_tibble(locations) %>%
-      select(colony_int_name,
-             colony_nat_name)
-    return(out)
+  if (loadGeometries) {
+    locations <- sf::st_as_sf(locations, na.fail = FALSE, remove = FALSE)
   }
 
-
-  if(allLocations == T &
-     loadGeometries == T){
-
-    locations <- sf::st_read(con, DBI::Id(schema = "metadata", table = "location"))
-    out <- as_tibble(locations) %>%
-      sf::st_as_sf() %>%
-      select(location_name,
-             colony_int_name,
-             colony_nat_name)
-    return(out)
-  }
-
-  if(allLocations == F &
-     loadGeometries == T){
-
-    locations <- sf::st_read(con, DBI::Id(schema = "metadata", table = "colony"))
-    out <- as_tibble(locations) %>%
-      sf::st_as_sf() %>%
-      select(colony_int_name,
-             colony_nat_name)
-    return(out)
-  }
+  return(locations)
 
 }
-
-
-
-
-
-
-

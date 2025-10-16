@@ -142,14 +142,14 @@ if(!is.null(sessionId)){
 }
 
 
-noAffectedRows <- DBI::dbGetQuery(con, selectQuery)
+noAffectedRows <- DBI::dbGetQuery(the$con, selectQuery)
 
 
 if(isTRUE(force)){
 
-  DBI::dbExecute(con, deleteMetadata)
-  DBI::dbExecute(con, deleteStartups)
-  DBI::dbExecute(con, deleteSessions)
+  DBI::dbExecute(the$con, deleteMetadata)
+  DBI::dbExecute(the$con, deleteStartups)
+  DBI::dbExecute(the$con, deleteSessions)
 
 
 } else {
@@ -159,9 +159,9 @@ if(isTRUE(force)){
 
   if(answer == 1){
 
-    DBI::dbExecute(con, deleteMetadata)
-    DBI::dbExecute(con, deleteStartups)
-    DBI::dbExecute(con, deleteSessions)
+    DBI::dbExecute(the$con, deleteMetadata)
+    DBI::dbExecute(the$con, deleteStartups)
+    DBI::dbExecute(the$con, deleteSessions)
 
   }
 

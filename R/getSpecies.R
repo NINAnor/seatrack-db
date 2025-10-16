@@ -13,7 +13,7 @@
 getSpecies <- function(){
   checkCon()
 
-  species <- dbReadTable(con, DBI::Id(schema = "metadata", table = "subspecies"))
+  species <- dbReadTable(the$con, DBI::Id(schema = "metadata", table = "subspecies"))
 
   out <- as_tibble(species) %>%
     select(species_name_eng,

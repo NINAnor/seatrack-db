@@ -21,10 +21,10 @@ writeLoggerImport <- function(loggerImport,
                               overwrite = FALSE){
  checkCon()
   DBI::dbWithTransaction(
-    con,
+    the$con,
     {
-      DBI::dbSendQuery(con, "SET search_path TO imports, public")
-      DBI::dbWriteTable(con, "logger_import", loggerImport, append = append, overwrite = overwrite)
+      DBI::dbSendQuery(the$con, "SET search_path TO imports, public")
+      DBI::dbWriteTable(the$con, "logger_import", loggerImport, append = append, overwrite = overwrite)
     }
   )
 }

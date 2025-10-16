@@ -1,26 +1,14 @@
 ---
 title: "Example workflow of input and output to the Seatrack database"
 author: "Jens Åström"
-date: "`r Sys.Date()`"
-output: 
-  pdf_document:
-    toc: true
-    highlight: tango
-  rmarkdown::html_vignette:
+date: "2025-10-10"
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{R.rsp::asis}
+  %\VignetteIndexEntry{Example flow}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  tidy = T
-)
-options(width = 60)
-```
+
 
 
 Summary
@@ -53,11 +41,12 @@ Firstly
 
 Remember to always work using the lastest version of the R package SeatrackR. This is installed by:
 
-```{r, eval = F}
+
+``` r
 devtools::install_github("NINAnor/seatrack-db/seatrackR")
 ```
 
-As of this time, the current version is `r gsub("(.*)([0-9]\\.[0-9]*\\.[0-9]*\\.[0-9]*)(.*)", "\\2",  citation("seatrackRdb"), perl = T)`.
+As of this time, the current version is 0.0.2.30.
 
 
 Connecting to the database
@@ -66,9 +55,12 @@ Use your name and password, provided to you elsewhere. Remember to change your p
 
 For this work-through, we use the username: testwriter with password:testwriter. We also use several functions in the tidyverse package universe, so we'll load this as well.
 
-```{r connect, message=FALSE}
-library(seatrackR)
+
+``` r
+library(seatrackRdb)
 connectSeatrack(Username = "testwriter", Password = "testwriter")
+#> Error: connection to server at "seatrack.nina.no" (10.2.1.16), port 5432 failed: FATAL:  password authentication failed for user "testwriter"
+#> connection to server at "seatrack.nina.no" (10.2.1.16), port 5432 failed: FATAL:  password authentication failed for user "testwriter"
 
 ## To change the password:
 # changePassword("newpassword")
@@ -81,16 +73,20 @@ library(stringr)
 
 Internally, `connectSeatrack` creates a connection to the database called `con` through the package `DBI` using the driver `Rpostgres::Postgres()`. Most functions used later checks that this connection is active and trows an error if it is not. Although you probably won't ever have to, you check the connection and also disconnect manually. Normally, you don't need to disconnect.
 
-```{r disconnect, error = T}
+
+``` r
 
 disconnectSeatrack()
 
 checkCon() ##produces error if not connected
+#> Error in checkCon(): could not find function "checkCon"
 
 connectSeatrack(Username = "testwriter", Password = "testwriter")
+#> Error: connection to server at "seatrack.nina.no" (10.2.1.16), port 5432 failed: FATAL:  password authentication failed for user "testwriter"
+#> connection to server at "seatrack.nina.no" (10.2.1.16), port 5432 failed: FATAL:  password authentication failed for user "testwriter"
 
 checkCon() ##returns nothing if the connection exists
-
+#> Error in checkCon(): could not find function "checkCon"
 ```
 
 
@@ -132,319 +128,85 @@ As of today, the redistribution rules are:
 The table `sampleLoggerImport` contains an example of information required to register, startup, and allocate a number of loggers. This is written to the `imports.logger_import` table by the function `writeLoggerImport`. The sample data contains both information on new loggers, their startup, and allocations. Note that we don't have to include info on all these steps in the same go. It is fine to first just send the columns that contain the info on the logger serial numbers, then the ones that starts them, and lastly the ones that allocates them. Remember also that if you also include info on shutdown in the same go (shutdown_session = True), then the session is closed and you won't be able to upload deployment or retrieval data. The order of input matters!
     
 
-```{r}
+
+``` r
 sampleLoggerImport
-``` 
+#> Error: object 'sampleLoggerImport' not found
+```
 We can check how many of the rows in the table about to be imported that has starttimes, and will result in started logging sessions. 
 
 
-```{r}
+
+``` r
 noStartups <- sampleLoggerImport %>% 
   summarize("no_startups" = sum(!is.na(starttime_gmt)))
+#> Error: object 'sampleLoggerImport' not found
 noStartups
-```
-
-So, the import of this data should result in `r noStartups` active sessions (since we here start with an empty database). Next, we import the logger startup data.
-
-```{r, eval = T}
-writeLoggerImport(sampleLoggerImport)
-```
-
-We can use some convenience functions to checkout some of the newly imported data. The `getLoggerInfo` function reads from the loggers.logger_info table, which stores basic information of each registered logger (in use or not). 
-
-```{r}
-loggerInfo <- getLoggerInfo() # This reads from the loggers.logger_info table
-loggerInfo
-```
-We see that we have `r nrow(loggerInfo)` registered loggers. Next, we can have a look at the current active sessions, most easily through the `getActiveSessions` function.
-
-```{r}
-activeSessions <- getActiveSessions() # This reads from the table loggers.logging_session. 
-activeSessions
-
-```
-
-We see that there are `r nrow(activeSessions)` open sessions, meaning they have been started up but not shut down.
-We can se how many of these have been deployed and retrieved by counting the number of rows with deployment id and a retrieval id. Note that we exclude the rows with NAs, which signifies missing data and is read as `NULL` in the database.
-
-```{r}
-activeSessions %>% 
-    summarise("no_deployed" = sum(!is.na(deployment_id)), 
-              "no_retrieved" = sum(!is.na(retrieval_id)))
-```
-
-At this point all `r nrow(activeSessions)` loggers are started up, but none is registered as deployed or retrieved.
-
-Importing metadata (field information)
-===========
-When the loggers are registered and started up, we can upload some metadata. This conforms to the existing metadata sheets used in the field. Note here the correct order of input; first start up a session through the `writeLoggerImport` function, then import deployment info using the `writeMetadata()` function, then do the same with the retrieval data. You can import deployment and retrieval data in the same go if they appear in the right order in the metadata file (sort by date to make it so). 
-
-```{r}
-sampleMetadata
-```
-In this test case, the metadata file contains both deployment, retrieval and measurement info. We can see how many deployments and retrievals we have.
-
-```{r}
-noDepRetr <- sampleMetadata %>% 
-  summarise("noDeployments" = sum(!is.na(logger_id_deployed)), 
-            "noRetrievals" = sum(!is.na(logger_id_retrieved)))
-noDepRetr
-```
-
-So, `r noDepRetr$noDeployments` deployment events, and `r noDepRetr$noRetrievals` retrieval events are going to be registered in one go, by importing this data. Before we import the data, we can do some quality checks to find common errors. The import routine should stop in the event of important errors, but it can be tedious to step through these problems one by one. The function `checkMetadata` wraps several checking routines, see `?checkMetadata` for a list of all of them.
-
-
-```{r, include = F}
-
-sampleMetadata$data_responsible[20] <- "Alkekungen himself"
-sampleMetadata$logger_id_retrieved[107:109] <- "scraped off!" #"Z231" "Z236" "Z234"
-sampleMetadata$ring_number[110] <- "5175149" # "5175140"
-
-```
-
-```{r}
-myErrors <- checkMetadata(sampleMetadata)
-```
-
-Looks like there are errors in our metadata! The object created by the function `checkMetadata` has a special class, with a print and plot function. The plot and summary function can be used to quickly get a quick look, the print function (just typing the object) shows all errors and some hints. Look at the `str(myErrors)` if you want to se the innards of the object.
-
-```{r errorPlot}
-plot(myErrors)
-```
-
-
-```{r}
-summary(myErrors)
-```
-
-
-```{r}
-myErrors
-```
-
-In this case, it appears that the logger serial number was not readable for 3 loggers containing info on retrievals, and the field personnel noted this as "scraped off!". Naturally, this "serial number" is not registered in the logger_info table, and these loggers are not registered as in an open logging session. 
-
-In addition, someone has been having a bit of fun with the name of the data responsible on a record. This nickname is not registered in the metadata.people table. 
-
-We fix these errors and run another check.
-
-```{r}
-ringsOfErrors <- sampleMetadata$ring_number[107:109]
-sampleMetadata[sampleMetadata$ring_number %in% ringsOfErrors, ]
-
-```
-Going by the data on the deployments, it seems that the missing logger serial numbers where "Z231", "Z236", and "Z234".
-
-```{r}
-sampleMetadata$logger_id_retrieved[107:109] <- c("Z231", "Z236", "Z234")  
-```
-
-Now we look at the name that was not registered.
-
-```{r}
-sampleMetadata %>% 
-  select(date, colony, species, data_responsible) %>% 
-  filter(row_number() %in% 18:22)
-
-##Looks like it should be Svein-Håkon
-sampleMetadata$data_responsible[20] <- sampleMetadata$data_responsible[19]
-```
-Next, we take a look at the non-matching ring numbers for the deployment and retrievals
-
-```{r}
-
-sampleMetadata %>% 
-  filter(logger_id_deployed == "Z232" | logger_id_retrieved == "Z232")
-
-## Looks like there might be a typo on the retrieval data. The last digit should be a 0 and not a 9.
-
-```
-
-```{r}
-sampleMetadata$ring_number[which(sampleMetadata$logger_id_retrieved == "Z232")] <- 5175140
-
-```
-Time for a new check of the data.
-
-```{r}
-myErrors <- checkMetadata(sampleMetadata)
-```
-
-Thats better. Note however that these checks doesn't find every possible error. Please suggest further checks to put into this routine!
-
-
-We can now import the metadata.
-
-```{r, eval = T}
-writeMetadata(sampleMetadata)
-```
-
-And check the new status of the number of deployed and retrieved loggers.
-
-```{r}
-activeSessions <- getActiveSessions()
-
-
-activeSessions %>% 
-    summarise("no_deployed" = sum(!is.na(deployment_id)), 
-              "no_retrieved" = sum(!is.na(retrieval_id)))
-```
-
-We see that the logger_session table has been filled with data on deployments and retrievals. Data on the colony, species, and individ_id the logger was deployed on is also added to the table. The rows with retrieval data also contains data on the year tracked.
-
-```{r}
-activeSessions %>% 
-  filter(!is.na(retrieval_id))
+#> Error: object 'noStartups' not found
 ```
 
 
 
-Importing shutdown information
-=================
-We can now shut down the logging sessions that have been given retrieval data. We could also have shut down these logging sessions before, but we would then not be able to add deployment or retrieval data.
-
-We use the logger_import table again to shut the logging sessions down. For all rows where shutdown_session = True, the corresponding logging sessions will be shut down. Remember that it is usually not a good idea to import startup and shutdown data at the same time, since this will just open and close the session. One way of only importing shutdown info is to blank out all the other columns in the logger import data. 
-
-Here the startup and allocation info is empty.
-```{r}
-sampleLoggerShutdown
-
-```
-And we only have shutdown info.
-
-```{r}
-sampleLoggerShutdown %>% 
-  select(logger_serial_no, logger_model, shutdown_session:comment)
-```
-
-Remember that filenames will only be produced in the case when the `download_type` is either "Successfully downloaded" or "Reconstructed". Let's have a look at the types of downloads we are about to import.
-
-```{r}
-downloadTypes <- sampleLoggerShutdown %>% 
-  group_by(download_type) %>% 
-  tally()
-downloadTypes
-```
-This means that we should get filenames from `r downloadTypes %>% filter(download_type == "Successfully downloaded" | download_type == "Reconstructed" ) %>% tally()` of the `r nrow(sampleLoggerShutdown)` loggers.
-
-We import this data similarly as with the startups.
-
-```{r, eval = T}
-writeLoggerImport(sampleLoggerShutdown)
-```
-
-This should have closed `r nrow(sampleLoggerShutdown)` sessions and so we should now have `r noDepRetr$noDeployments - noDepRetr$noRetrievals` still active sessions.
-
-```{r}
-activeSessions <- getActiveSessions()
-activeSessions
-```
-Looks good.
-
-The shutdown also creates filenames associated with the session, depending on the make and model of the logger. These end up in the table loggers.file_archive.
-
-
-Working with the file archive
-=====================
-We can now see what these shutdowns has produced in the file archive table. This table lists the expected filenames produced by the logging sessions that has been shutdown. It is up to the users to manually upload these files to the file archive location. The file archive is an FTP server running on the same machine as the seatrack database. We use the passwords in the database to connect to the FTP server, but this is handled through the functions in this package so that users do not have to enter their credentials once a seatrack connection has been made.
-
-
-We can take a look at the expected filenames through to functions. Firstly, the function `getFileArchiveSummary` retrieves the info of the expected filenames, together with which logging session they are connected to and some info on the related birds.
-
-```{r}
-databaseFileArchive <- getFileArchiveSummary()
-
-databaseFileArchive
-```
-
-You could use this table to get some bookkeeping info. Currently, we have shut down 5 different logger models, some of which produces 7 and some that produces 4 files. For example see how the recorded file names group into individual logger models.
-
-```{r}
-databaseFileArchive %>% 
-  group_by(logger_model, session_id) %>% 
-  tally() %>%  
-  group_by(logger_model) %>% 
-  summarise(mean(n)) 
-```
 
 
 
-Currently, we have shut down 5 different logger models, some of which produces 7 and some that produces 4 files, depending on their make and model. We could also from this table see how many loggers that have been shutdown and are expected to have files associated with them.
-
-
-```{r}
-databaseFileArchive %>% 
-  summarise("noShutdownLoggers" = n_distinct(logger_serial_no, logger_model))
-```
-So out of the 57 shutdowns we performed, only 40 of them resulted in files in the table loggers.file_archive. This is as predicted since only 40 was successfully downloaded or had their download data reconstructed.
-
-
-Uploading and downloading files from the file storage.
---------------------
-So far, we have only looked in the database for the expected files connected to each logging session. The actual file storage is located on the FTP server. We can use the `listFileArchive` function to list the files in the file storage on this ftp server. This function also compares the the content of the file storage and to the proposed filenames in the database. 
-
-
-```{r}
-fileArchive <- listFileArchive()
-fileArchive
-```
-
-For the purpose of testing, we have uploaded some dummy files, called F630_2014_c65.sst, and F630_2014_c65driftadj.trn. These are found in the list element `filesInArchive` and since they are not expected by the database, also in the list element `filesNotInDatabase`. The summary also show `filesNotInArchive` which lists the expected files registered in the database, that are not yet sent to the file storage.
-
-We can upload files to the storage, using the function `uploadFiles`. This function grabs the appropriate username and passwords for the ftp connection from the database and uploads the files specified. You need to specify `overwrite = True` to overwrite existing files. Only users that login to the database with write permissions (members of the role group "seatrack_writer") will be able to upload files to the file storage.
-
-Here we will upload two test files that are locally stored in the folder "temp". 
-
-
-<!-- ```{r, include = F} -->
-<!-- disconnectSeatrack() -->
-<!-- load("../temp/credentials.Rdata") -->
-<!-- connectSeatrack(credentials[1], credentials[2]) -->
-<!-- ``` -->
 
 
 
-```{r}
-uploadFiles(c("test.txt", "test2.txt"), originFolder = "../temp")
-```
 
-Although we get a confirmation, we can double check that the files actually are now stored in the file storage.
 
-```{r}
-fileArchive <- listFileArchive()
-fileArchive
-```
 
-We can download files from the storage using the function `downloadFiles`. This is available for everyone that can login to the database (members of the group "seatrack_reader"). Here, we download all the files. 
 
-```{r}
-filesToGet = listFileArchive()$filesInArchive
-downloadFiles(files = filesToGet, destFolder = "../temp", overwrite = T)
-```
 
-More often though you would identify a subset of files to download. Which files you are interested in could be found through a custom SQL query, or some R code that searches through the `getFileArchiveSummary` output.
 
-Deleting files from the FTP archive
-----------------------
-In case a wrong file has been uploaded to the file archive, or for testing purposes, we may need to delete files from the file archive. This is done through the `deleteFiles` function, which requires write permissions in the database. This asks for confirmation if you don't specify force = True. 
 
-```{r}
-filesInArchive <- listFileArchive()$filesInArchive
-filesInArchive
 
-filesToDelete <- filesInArchive %>% 
-  filter(str_detect(filename, "test") )
-filesToDelete
 
-deleteFiles(files = filesToDelete, force = T)
 
-```
-We can double check that the test files are gone.
 
-```{r}
-listFileArchive()$filesInArchive
 
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -31,7 +31,7 @@ deleteActivity <- function(colony = NULL,
   checkCon()
 
 #append dummy condition to ease later conditions
-deleteTemp<- "DELETE FROM recordings.temperature
+deleteTemp <- "DELETE FROM recordings.temperature
                 USING recordings.temperature as t
                 LEFT OUTER JOIN loggers.logging_session as ls ON
                 t.session_id = ls.session_id
@@ -40,7 +40,7 @@ deleteTemp<- "DELETE FROM recordings.temperature
                 WHERE temperature.id = t.id"
 
 #append dummy condition to ease later conditions
-deleteAct<- "DELETE FROM recordings.activity
+deleteAct <- "DELETE FROM recordings.activity
                 USING recordings.activity as act
                 LEFT OUTER JOIN loggers.logging_session as ls ON
                 act.session_id = ls.session_id
@@ -48,7 +48,7 @@ deleteAct<- "DELETE FROM recordings.activity
                 ls.session_id = a.session_id
                 WHERE activity.id = act.id"
 
-deleteLight<- "DELETE FROM recordings.light
+deleteLight <- "DELETE FROM recordings.light
                 USING recordings.light as lig
                 LEFT OUTER JOIN loggers.logging_session as ls ON
                 lig.session_id = ls.session_id
@@ -157,14 +157,14 @@ if(!is.null(sessionId)){
 
 
 
-noAffectedRowsTemp <- DBI::dbGetQuery(con, selectQueryTemp)
-noAffectedRowsAct <- DBI::dbGetQuery(con, selectQueryAct)
-noAffectedRowsLight <- DBI::dbGetQuery(con, selectQueryLight)
+noAffectedRowsTemp <- DBI::dbGetQuery(the$con, selectQueryTemp)
+noAffectedRowsAct <- DBI::dbGetQuery(the$con, selectQueryAct)
+noAffectedRowsLight <- DBI::dbGetQuery(the$con, selectQueryLight)
 
 if(isTRUE(force)){
-    DBI::dbExecute(con, deleteLight)
-    DBI::dbExecute(con, deleteTemp)
-    DBI::dbExecute(con, deleteAct)
+    DBI::dbExecute(the$con, deleteLight)
+    DBI::dbExecute(the$con, deleteTemp)
+    DBI::dbExecute(the$con, deleteAct)
 
 } else {
 
@@ -176,9 +176,9 @@ if(isTRUE(force)){
 
   if(answer == 1){
 
-      DBI::dbExecute(con, deleteLight)
-      DBI::dbExecute(con, deleteTemp)
-      DBI::dbExecute(con, deleteAct)
+      DBI::dbExecute(the$con, deleteLight)
+      DBI::dbExecute(the$con, deleteTemp)
+      DBI::dbExecute(the$con, deleteAct)
 
   }
 

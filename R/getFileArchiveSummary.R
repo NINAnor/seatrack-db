@@ -13,8 +13,9 @@
 getFileArchiveSummary <- function(colony = NULL,
                            year = NULL){
   checkCon()
+  ### THIS GETS ALL COLONIES/YEARS ALREADY - WOULD BE MORE EFFICIENT TO DO IT IN SQL
 
-  res <- DBI::dbGetQuery(con,
+  res <- DBI::dbGetQuery(the$con,
   "SELECT f.file_id, f.session_id, ls.colony, ii.ring_number, ii.euring_code, ls.year_tracked, li.logger_serial_no, li.logger_model, f.filename
   FROM loggers.file_archive f, loggers.logging_session ls, individuals.individ_info ii, loggers.logger_info li
   WHERE f.session_id = ls.session_id
@@ -59,7 +60,7 @@ getFileArchiveSummary2 <- function(colony = NULL,
   AND ls.logger_id = li.logger_id
   AND ls.individ_id = ii.individ_id"
 
-  res <- dbGetQuery(con, fileQ)
+  res <- dbGetQuery(the$con, fileQ)
 
   if(!is.null(colony)){
     res <- res %>% filter(colony %in% colony)

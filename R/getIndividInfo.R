@@ -9,28 +9,26 @@
 #' seatrackConnect(Username = "testreader", Password = "testreader")
 #' individInfo <- getInfividInfo()
 #' }
-
-
-
 getIndividInfo <- function(colony = NULL,
                            year = NULL){
 
+  # GETS EVERYTHING, THEN FILTERS IN R - MOVE TO DB QUERY.
   checkCon()
   selectColony <- colony
   selectYear <- year
 
-  sessions <- dplyr::tbl(con, dbplyr::in_schema("loggers", "logging_session"))
+  sessions <- dplyr::tbl(the$con, dbplyr::in_schema("loggers", "logging_session"))
 
-  individs <- dplyr::tbl(con, dbplyr::in_schema("individuals", "individ_info"))
+  individs <- dplyr::tbl(the$con, dbplyr::in_schema("individuals", "individ_info"))
 
-  status <- dplyr::tbl(con, dbplyr::in_schema("individuals", "individ_status"))
+  status <- dplyr::tbl(the$con, dbplyr::in_schema("individuals", "individ_status"))
 
-  deployments <- dplyr::tbl(con, dbplyr::in_schema("loggers", "deployment")) %>%
+  deployments <- dplyr::tbl(the$con, dbplyr::in_schema("loggers", "deployment")) %>%
     select(session_id,
            status_date = deployment_date) %>%
     mutate(eventType = "Deployment")
 
-  retrievals <- dplyr::tbl(con, dbplyr::in_schema("loggers", "retrieval")) %>%
+  retrievals <- dplyr::tbl(the$con, dbplyr::in_schema("loggers", "retrieval")) %>%
     select(session_id,
            status_date = retrieval_date) %>%
     mutate(eventType = "Retrieval")

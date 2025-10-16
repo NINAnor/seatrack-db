@@ -19,9 +19,9 @@ deleteFiles <- function(files = NULL, force = F, ...){
 
   checkCon()
 
-  current_user <- DBI::dbGetQuery(con, "SELECT current_user")
+  current_user <- DBI::dbGetQuery(the$con, "SELECT current_user")
 
-  current_roles <- DBI::dbGetQuery(con, paste0("select rolname from pg_user
+  current_roles <- DBI::dbGetQuery(the$con, paste0("select rolname from pg_user
                                              join pg_auth_members on (pg_user.usesysid=pg_auth_members.member)
                                              join pg_roles on (pg_roles.oid=pg_auth_members.roleid)
                                              where

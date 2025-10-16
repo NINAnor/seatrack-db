@@ -4,12 +4,13 @@
 #'
 
 
-upstartVersion <- function(){
-
+upstartVersion <- function() {
   package_name <- environmentName(environment(checkCon))
 
-  installed_version <- tryCatch(packageVersion(gsub(".*/",
-                                                    "", package_name)), error = function(e) NA)
+  installed_version <- tryCatch(packageVersion(gsub(
+    ".*/",
+    "", package_name
+  )), error = function(e) NA)
 
   doc_url <- utils::packageDescription(package_name)$URL
 
@@ -19,58 +20,65 @@ upstartVersion <- function(){
   # Get repository name from doc_url
   repo <- regmatches(doc_url, regexec(".*/([^/]+)/[^/]*/*$", doc_url))[[1]][2]
 
-  #Get package URL
-  description_url <- paste0("https://raw.githubusercontent.com/", host, "/", repo,"/master/seatrackR/DESCRIPTION")
-  
+  # Get package URL
+  description_url <- paste0("https://raw.githubusercontent.com/", host, "/", repo, "/master/seatrackR/DESCRIPTION")
+
   # Read the lines
   x <- readLines(description_url)
 
   remote_version <- gsub("(Version: )(.*)", "\\2", grep("Version:", x, value = TRUE))
 
 
-  res <- list(package = package_name, installed_version = installed_version,
-              latest_version = remote_version, up_to_date = NA)
+  res <- list(
+    package = package_name, installed_version = installed_version,
+    latest_version = remote_version, up_to_date = NA
+  )
 
   if (is.na(installed_version)) {
     return(res)
   }
 
   if (remote_version > installed_version) {
-    msg <- paste("##", package_name, "is out of date, latest version is",
-                 remote_version)
+    msg <- paste(
+      "##", package_name, "is out of date, latest version is",
+      remote_version
+    )
     message(msg)
     res$up_to_date <- FALSE
-
-
   }
   return(res)
 }
 
-#upstartVersion
+# upstartVersion
 
-checkCon <- function() {if(!exists("con")){ stop("No connection, run connectSeatrack()")} else{
-  if(class(con)!= "PqConnection"){ stop("\"con\" is not of class \"PqConnection\". Have you run connectSeatrack()?")}
-  if(!DBI::dbIsValid(con)) { stop("No connection, run connectSeatrack()")}
+checkCon <- function() {
+  if (!exists("con", env = the)) {
+    stop("No connection, run connectSeatrack()")
+  } else {
+    if (class(the$con) != "PqConnection") {
+      stop("\"con\" is not of class \"PqConnection\". Have you run connectSeatrack()?")
+    }
+    if (!DBI::dbIsValid(the$con)) {
+      stop("No connection, run connectSeatrack()")
+    }
   }
 }
 
 
-compareNA <- function(v1,v2) {
+compareNA <- function(v1, v2) {
   # This function returns TRUE wherever elements are the same, including NA's,
   # and false everywhere else.
-  same <- (v1 == v2)  |  (is.na(v1) & is.na(v2))
+  same <- (v1 == v2) | (is.na(v1) & is.na(v2))
   same[is.na(same)] <- FALSE
   return(same)
 }
 
-passEnv <- new.env()
 
-
-.getFtpUrl <- function(){
+.getFtpUrl <- function() {
   checkCon()
 
-  password = get(".pass", envir = passEnv)
-  current_user <- DBI::dbGetQuery(con, "SELECT current_user")
+  password <- get(".pass", envir = the)
+  current_user <- DBI::dbGetQuery(the$con, "SELECT current_user")
 
   pwd <- paste0(password, current_user)
 
@@ -78,19 +86,20 @@ passEnv <- new.env()
 
   url <- "ftp://seatrack.nina.no"
 
-  out <- list("url" = url,
-              "pwd" = pwd)
+  out <- list(
+    "url" = url,
+    "pwd" = pwd
+  )
   return(out)
-
 }
 
 # .getFtpUrl <- function(write = F){
 #   checkCon()
 #
 #   if(write == T){
-#     current_user <- DBI::dbGetQuery(con, "SELECT current_user")
+#     current_user <- DBI::dbGetQuery(the$con, "SELECT current_user")
 #
-#     current_roles <- DBI::dbGetQuery(con, paste0("select rolname from pg_user
+#     current_roles <- DBI::dbGetQuery(the$con, paste0("select rolname from pg_user
 #                                                  join pg_auth_members on (pg_user.usesysid=pg_auth_members.member)
 #                                                  join pg_roles on (pg_roles.oid=pg_auth_members.roleid)
 #                                                  where
@@ -98,7 +107,7 @@ passEnv <- new.env()
 #
 #   if(!("admin" %in% current_roles)) stop("Connected user needs to be part of admin group")
 #
-#   pwd <- DBI::dbGetQuery(con, "SELECT pwd from restricted.write WHERE name = 'ftp.nina.no'")
+#   pwd <- DBI::dbGetQuery(the$con, "SELECT pwd from restricted.write WHERE name = 'ftp.nina.no'")
 #
 #   pwd <- paste0("ftp.nina.no|ftpintern:", pwd)
 #
@@ -112,7 +121,7 @@ passEnv <- new.env()
 #
 #   if(write == F) {
 #
-#     pwd <- DBI::dbGetQuery(con, "SELECT pwd from restricted.read WHERE name = 'ftp.nina.no'")
+#     pwd <- DBI::dbGetQuery(the$con, "SELECT pwd from restricted.read WHERE name = 'ftp.nina.no'")
 #
 #     pwd <- paste0("ftp.nina.no|ftpekstern:", pwd)
 #
@@ -126,50 +135,53 @@ passEnv <- new.env()
 # }
 
 
-reakHavoc <- function(){
-
+reakHavoc <- function() {
   checkCon()
 
-  answer <- menu(c("Yes (1)", "No (2)"), title ="You are about to delete all logger records!!! Are you sure?")
+  answer <- menu(c("Yes (1)", "No (2)"), title = "You are about to delete all logger records!!! Are you sure?")
 
   havoc1 <- "TRUNCATE TABLE loggers.logger_info RESTART IDENTITY CASCADE;"
   havoc2 <- "TRUNCATE TABLE individuals.individ_info RESTART IDENTITY CASCADE;"
 
 
 
-  if(answer == 1){
-    dbSendStatement(con, havoc1)
-    dbSendStatement(con, havoc2)
+  if (answer == 1) {
+    dbSendStatement(the$con, havoc1)
+    dbSendStatement(the$con, havoc2)
     return("Things are gone, database should be clean!")
-    } else return("Nothing")
-
+  } else {
+    return("Nothing")
+  }
 }
 
 
-##Error handling from stackoverflow user Martin Morgan, Q: 4948361
+## Error handling from stackoverflow user Martin Morgan, Q: 4948361
 
-factory <- function(fun)
+factory <- function(fun) {
   function(...) {
     warn <- err <- mess <- NULL
     res <- withCallingHandlers(
-      tryCatch(fun(...), error=function(e) {
+      tryCatch(fun(...), error = function(e) {
         err <<- conditionMessage(e)
         NULL
-      }), warning=function(w) {
+      }),
+      warning = function(w) {
         warn <<- append(warn, conditionMessage(w))
         invokeRestart("muffleWarning")
       },
-      message = function(m){
+      message = function(m) {
         mess <<- append(mess, conditionMessage(m))
-      })
-    list(res, warn=warn, err=err, mess = mess)
+      }
+    )
+    list(res, warn = warn, err = err, mess = mess)
   }
+}
 
-.has <- function(x, what)
+.has <- function(x, what) {
   !sapply(lapply(x, "[[", what), is.null)
+}
 hasWarning <- function(x) .has(x, "warn")
 hasError <- function(x) .has(x, "err")
 isClean <- function(x) !(hasError(x) | hasWarning(x))
 value <- function(x) sapply(x, "[[", 1)
 cleanv <- function(x) sapply(x[isClean(x)], "[[", 1)
-

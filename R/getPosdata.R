@@ -54,7 +54,8 @@ getPosdata <- function(species= NULL,
                        loadImportDate = T,
                        asTibble = T,
                        limit = F){
-
+  # ADD PAGINATION
+  # CURRENTLY DOWNLOADS THE WHOLE POSTABLE BEFORE FILTERING
   checkCon()
 
   selectSpecies <- species
@@ -65,7 +66,7 @@ getPosdata <- function(species= NULL,
     stop("limit must be FALSE or a numeric value")
   }
 
-  postable <- tbl(con, dbplyr::in_schema("views", "postable"))
+  postable <- tbl(the$con, dbplyr::in_schema("views", "postable"))
   res <- postable
 
   if(!is.null(selectSpecies)){

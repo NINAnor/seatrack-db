@@ -1,6 +1,8 @@
 Meta
-
-
 ../temp/
 renv/settings.json
 docs
+.Renviron
+tz_experiments.html
+tz_experiments.rmd
+.vscode

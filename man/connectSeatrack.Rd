@@ -21,13 +21,9 @@ connectSeatrack(
 \item{host}{Character. The host of the database. For testing purposes. There should be no need for the user to change this.}
 
 \item{dbname}{Character. Name of database, for testing purposes. Default is "seatrack" which is the production database.}
-
-\item{check_interrupts}{True/False. Should user interrupts be checked during the query execution (before
-first row of data is available)? Setting to \code{TRUE} allows interruption of queries
-running too long.}
 }
 \value{
-A DBI connection to the Seatrack database
+No return, a connection to the database is opened
 }
 \description{
 This function establishes a connection to the Seatrack database. It is a simple convenience function that uses the
@@ -45,7 +41,8 @@ Seatrack, that you don't share with other sites or applications.
 \examples{
 \dontrun{
 connectSeatrack(Username = "testreader", Password = "testreader")
-DBI::dbGetQuery(con, "SELECT * FROM loggers.logging_session LIMIT 10")
+con <- getSeatrackConnection()
+DBI::dbGetQuery(the$con, "SELECT * FROM loggers.logging_session LIMIT 10")
 DBI::dbDisconnect(con)
 }
 }

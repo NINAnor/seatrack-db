@@ -26,27 +26,27 @@ writeRecordings <- function(lightData = NULL,
 
   if(!is.null(lightData)){
   DBI::dbWithTransaction(
-    con,
+    the$con,
     {
-      DBI::dbWriteTable(con, Id(schema = "recordings", table = "light"), lightData, append = append, overwrite = overwrite)
+      DBI::dbWriteTable(the$con, Id(schema = "recordings", table = "light"), lightData, append = append, overwrite = overwrite)
     }
   )
   }
 
   if(!is.null(activityData)){
     DBI::dbWithTransaction(
-      con,
+      the$con,
       {
-        DBI::dbWriteTable(con, Id(schema = "recordings", table = "activity"), activityData, append = append, overwrite = overwrite)
+        DBI::dbWriteTable(the$con, Id(schema = "recordings", table = "activity"), activityData, append = append, overwrite = overwrite)
       }
     )
   }
 
   if(!is.null(temperatureData)){
     DBI::dbWithTransaction(
-      con,
+      the$con,
       {
-        DBI::dbWriteTable(con, Id(schema = "recordings", table = "temperature"), temperatureData, append = append, overwrite = overwrite)
+        DBI::dbWriteTable(the$con, Id(schema = "recordings", table = "temperature"), temperatureData, append = append, overwrite = overwrite)
       }
     )
   }

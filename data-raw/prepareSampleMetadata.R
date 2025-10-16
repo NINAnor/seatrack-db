@@ -192,7 +192,7 @@ sampleLoggerModels <- sampleLoggerInfo[!duplicated(sampleLoggerInfo[c(2, 4)]), c
 names(sampleLoggerModels) <- c("producer", "model")
 devtools::use_data(sampleLoggerModels, overwrite = T)
 
-# tmpLoggerInfo <- dbGetQuery(con, "SELECT * FROM loggers.logger_info")
+# tmpLoggerInfo <- dbGetQuery(the$con, "SELECT * FROM loggers.logger_info")
 # sampleLoggerImport<- tmpLoggerInfo["logger_id"]
 # sampleLoggerImport$startdate_gmt <- Sys.Date()
 # sampleLoggerImport$starttime_gmt <- Sys.time()
@@ -203,10 +203,10 @@ devtools::use_data(sampleLoggerModels, overwrite = T)
 # sampleLoggerImport$programmed_gmt_date <- Sys.Date()
 # sampleLoggerImport$programmed_gmt_time <- Sys.time()
 #
-# DBI::dbSendQuery(con, "SET search_path TO imports, public")
-# DBI::dbWriteTable(con, "logger_import", sampleLoggerImport, append = T, overwrite = F)
+# DBI::dbSendQuery(the$con, "SET search_path TO imports, public")
+# DBI::dbWriteTable(the$con, "logger_import", sampleLoggerImport, append = T, overwrite = F)
 
- # oldLoggerInfo <- DBI::dbGetQuery(con, "SELECT * FROM loggers.logger_info")
+ # oldLoggerInfo <- DBI::dbGetQuery(the$con, "SELECT * FROM loggers.logger_info")
  # newLoggerInfo <- anti_join(sampleLoggerInfo, oldLoggerInfo)
  # writeLoggerInfo(newLoggerInfo)
 
@@ -273,32 +273,32 @@ toLoad <- list("breeding_stages",
             "subspecies")
 
 loadFun <- function(x){
-  tmp <- dbReadTable(con,  Id(schema = "metadata", table = x))
+  tmp <- dbReadTable(the$con, Id(schema = "metadata", table = x))
   assign(x, tmp, envir = .GlobalEnv)
 }
 
 lapply(toLoad, loadFun)
 
 
-# breeding_stages <- dbReadTable(con, Id(schema = "metadata", table = "breeding_stages"))
-# breeding_success_criterion <- dbReadTable(con, Id(schema = "metadata", table = "breeding_success_criterion"))
-# colony <- dbReadTable(con, Id(schema = "metadata", table = "colony"))
-# download_types <- dbReadTable(con, Id(schema = "metadata", table = "download_types"))
-# euring_codes <- dbReadTable(con, Id(schema = "metadata", table = "euring_codes"))
-# import_types <- dbReadTable(con, Id(schema = "metadata", table = "import_types"))
-# location <- dbReadTable(con, Id(schema = "metadata", table = "location"))
-# logger_fate <- dbReadTable(con, Id(schema = "metadata", table = "logger_fate"))
-# logger_files <- dbReadTable(con, Id(schema = "metadata", table = "logger_files"))
-# logger_models <- dbReadTable(con, Id(schema = "metadata", table = "logger_models"))
-# logger_producers <- dbReadTable(con, Id(schema = "metadata", table = "logger_producers"))
-# logging_modes <- dbReadTable(con, Id(schema = "metadata", table = "logging_modes"))
-# mounting_types <- dbReadTable(con, Id(schema = "metadata", table = "mounting_types"))
-# people <- dbReadTable(con, Id(schema = "metadata", table = "people"))
-# retrieval_type <- dbReadTable(con, Id(schema = "metadata", table = "retrieval_type"))
-# sex <- dbReadTable(con, Id(schema = "metadata", table = "sex"))
-# sexing_method <- dbReadTable(con, Id(schema = "metadata", table = "sexing_method"))
-# species <- dbReadTable(con, Id(schema = "metadata", table = "species"))
-# subspecies <- dbReadTable(con, Id(schema = "metadata", table = "subspecies"))
+# breeding_stages <- dbReadTable(the$con, Id(schema = "metadata", table = "breeding_stages"))
+# breeding_success_criterion <- dbReadTable(the$con, Id(schema = "metadata", table = "breeding_success_criterion"))
+# colony <- dbReadTable(the$con, Id(schema = "metadata", table = "colony"))
+# download_types <- dbReadTable(the$con, Id(schema = "metadata", table = "download_types"))
+# euring_codes <- dbReadTable(the$con, Id(schema = "metadata", table = "euring_codes"))
+# import_types <- dbReadTable(the$con, Id(schema = "metadata", table = "import_types"))
+# location <- dbReadTable(the$con, Id(schema = "metadata", table = "location"))
+# logger_fate <- dbReadTable(the$con, Id(schema = "metadata", table = "logger_fate"))
+# logger_files <- dbReadTable(the$con, Id(schema = "metadata", table = "logger_files"))
+# logger_models <- dbReadTable(the$con, Id(schema = "metadata", table = "logger_models"))
+# logger_producers <- dbReadTable(the$con, Id(schema = "metadata", table = "logger_producers"))
+# logging_modes <- dbReadTable(the$con, Id(schema = "metadata", table = "logging_modes"))
+# mounting_types <- dbReadTable(the$con, Id(schema = "metadata", table = "mounting_types"))
+# people <- dbReadTable(the$con, Id(schema = "metadata", table = "people"))
+# retrieval_type <- dbReadTable(the$con, Id(schema = "metadata", table = "retrieval_type"))
+# sex <- dbReadTable(the$con, Id(schema = "metadata", table = "sex"))
+# sexing_method <- dbReadTable(the$con, Id(schema = "metadata", table = "sexing_method"))
+# species <- dbReadTable(the$con, Id(schema = "metadata", table = "species"))
+# subspecies <- dbReadTable(the$con, Id(schema = "metadata", table = "subspecies"))
 
 
 save(breeding_stages,
@@ -324,7 +324,7 @@ save(breeding_stages,
 #connectSeatrack(dbname = "seatrack_devel", Username = "seatrack_admin", Password = "")
 
 writeFun <- function(x){
-    dbWriteTable(con,  Id(schema = "metadata", table = x), append = T, get(x))
+    dbWriteTable(the$con, Id(schema = "metadata", table = x), append = T, get(x))
 
 }
 
@@ -335,7 +335,7 @@ lapply(toLoad, writeFun)
 lightRaw <- read_delim("../../database_struct/Standardtabeller/light_BT_overview.txt", delim = "\t")
 lightRaw
 
-filenames <- dbReadTable(con, Id(schema = "loggers", table = "file_archive"))
+filenames <- dbReadTable(the$con, Id(schema = "loggers", table = "file_archive"))
 
 sampleLight <- lightRaw %>%
   slice(1:100) %>%

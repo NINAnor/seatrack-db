@@ -20,10 +20,10 @@ writeIndividInfo <- function(individData,
                              overwrite = FALSE){
   checkCon()
   DBI::dbWithTransaction(
-    con,
+    the$con,
     {
-      DBI::dbSendQuery(con, "SET search_path TO individuals, public")
-      DBI::dbWriteTable(con, "individ_info", individData, append = append, overwrite = overwrite)
+      DBI::dbSendQuery(the$con, "SET search_path TO individuals, public")
+      DBI::dbWriteTable(the$con, "individ_info", individData, append = append, overwrite = overwrite)
     }
   )
 }

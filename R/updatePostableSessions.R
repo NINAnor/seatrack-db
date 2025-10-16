@@ -19,9 +19,9 @@ updatePosdataSession <- function(){
   checkCon()
 
 
-  current_user <- DBI::dbGetQuery(con, "SELECT current_user")
+  current_user <- DBI::dbGetQuery(the$con, "SELECT current_user")
 
-  current_roles <- DBI::dbGetQuery(con, paste0("select rolname from pg_user
+  current_roles <- DBI::dbGetQuery(the$con, paste0("select rolname from pg_user
                                                     join pg_auth_members on (pg_user.usesysid=pg_auth_members.member)
                                                     join pg_roles on (pg_roles.oid=pg_auth_members.roleid)
                                                     where
@@ -34,7 +34,7 @@ updatePosdataSession <- function(){
   answer <- menu(c("Yes (1)", "No (2)"), title = paste0("This will take > 30 minutes. Are you sure?"))
 
   if(answer == 1){
-    upd <- DBI::dbSendStatement(con, "SELECT functions.fn_manual_update_postable_logging_session()")
+    upd <- DBI::dbSendStatement(the$con, "SELECT functions.fn_manual_update_postable_logging_session()")
     DBI::dbClearResult(upd)
   }
 

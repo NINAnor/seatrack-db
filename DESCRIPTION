@@ -25,6 +25,6 @@ Imports:
   	readr,
   	lubridate,
 	dplyr
-VignetteBuilder: 
+VignetteBuilder:
 	knitr
 URL: https://ninanor.github.io/seatrack-db/

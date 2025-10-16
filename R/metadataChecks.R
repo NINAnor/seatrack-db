@@ -61,11 +61,11 @@ date_part('year', starttime_gmt) as \"startYear\"
   WHERE logging_session.active IS True
    "
 
-activeData <- DBI::dbGetQuery(con, activeDataQ)
+activeData <- DBI::dbGetQuery(the$con, activeDataQ)
 
 deployedIndividualsQ <- "SELECT * FROM loggers.deployment"
 
-deployedIndividuals <- DBI::dbGetQuery(con, deployedIndividualsQ)
+deployedIndividuals <- DBI::dbGetQuery(the$con, deployedIndividualsQ)
 
 myTableDeployedIndividuals <- myTable %>%
   transform(startYear = as.integer(as.character(format(date, "%Y"))))
@@ -119,7 +119,7 @@ return(out)
 checkOpenSession <- function(myTable){
  checkCon()
 
-  activeSessions <- DBI::dbGetQuery(con,
+  activeSessions <- DBI::dbGetQuery(the$con,
              "SELECT li.logger_serial_no, li.logger_model
               FROM loggers.logging_session ls, loggers.logger_info li
               WHERE li.logger_id = ls.logger_id
@@ -144,7 +144,7 @@ checkOpenSession <- function(myTable){
 checkLoggers <- function(myTable){
   checkCon()
 
-  registeredLoggers <- DBI::dbGetQuery(con,
+  registeredLoggers <- DBI::dbGetQuery(the$con,
                                     "SELECT * FROM loggers.logger_info")
 
 
@@ -168,7 +168,7 @@ checkLoggers <- function(myTable){
 checkNames <- function(myTable){
   checkCon()
 
-  presentNames <- DBI::dbGetQuery(con,
+  presentNames <- DBI::dbGetQuery(the$con,
                                     "SELECT * FROM metadata.people")
 
   whichPeopleNotPresent <- !(myTable$data_responsible %in% presentNames$name)

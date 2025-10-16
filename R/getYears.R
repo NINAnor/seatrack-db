@@ -16,7 +16,7 @@ getYears <- function(){
   yearsQ <- "SELECT distinct year_tracked
             FROM positions.postable"
 
-  years <- dbGetQuery(con, yearsQ)
+  years <- dbGetQuery(the$con, yearsQ)
 
   out <- as_tibble(years)
 

@@ -4,7 +4,7 @@
 \alias{getColonies}
 \title{Retrieve info on the registered colonies and locations within colonies in the database}
 \usage{
-getColonies(allLocations = F, loadGeometries = F)
+getColonies(allLocations = FALSE, loadGeometries = FALSE)
 }
 \arguments{
 \item{allLocations}{True, False. Should all locations within colonies be loaded. Default = False.}
@@ -12,7 +12,7 @@ getColonies(allLocations = F, loadGeometries = F)
 \item{loadGeometries}{True, False. Should the geometries be loaded as an sf object. Default = False.}
 }
 \value{
-A tibble of the metadata.colony or metadata.location table with or without sf geometry.
+Either a tibble or a sf dataframe of the metadata.colony or metadata.location table.
 }
 \description{
 This function either reads from the metadata.colony or the metadata.location table, depending on the parameter allLocations.

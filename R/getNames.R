@@ -15,8 +15,8 @@
 getNames <- function(asTibble = F){
   checkCon()
 
-  res <- dplyr::tbl(con, dbplyr::in_schema("metadata", "people"))
-
+  res <- dplyr::tbl(the$con, dbplyr::in_schema("metadata", "people"))
+  # COULD RETURN MORE?
   res <- res %>%
     select(person_id,
            name,

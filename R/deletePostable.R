@@ -28,7 +28,7 @@ deletePostable <- function(delFiles){
       "'
       LIMIT 1")
 
-    result <- dbGetQuery(con, toDelete)
+    result <- dbGetQuery(the$con, toDelete)
     filesInPostable <- c(filesInPostable, result)
   }
 
@@ -47,7 +47,7 @@ deletePostable <- function(delFiles){
                        "'
       LIMIT 1")
 
-    result <- dbGetQuery(con, toDelete)
+    result <- dbGetQuery(the$con, toDelete)
     rowsInPostable <- c(rowsInPostable, result)
   }
 
@@ -55,10 +55,10 @@ deletePostable <- function(delFiles){
 
 
   DBI::dbWithTransaction(
-    con,
+    the$con,
     {
-      nRowsBefore <- DBI::dbGetQuery(con, "SELECT count(*) FROM positions.postable")
-      DBI::dbSendQuery(con, "SET search_path TO positions, public")
+      nRowsBefore <- DBI::dbGetQuery(the$con, "SELECT count(*) FROM positions.postable")
+      DBI::dbSendQuery(the$con, "SET search_path TO positions, public")
 
 
       for(i in 1:length(delFiles)){
@@ -68,11 +68,11 @@ deletePostable <- function(delFiles){
                          delFiles[i],
                          "'")
 
-        result <- dbSendQuery(con, toDelete)
+        result <- dbSendQuery(the$con, toDelete)
       }
 
 
-      nRowsAfter <- DBI::dbGetQuery(con, "SELECT count(*) FROM positions.postable")
+      nRowsAfter <- DBI::dbGetQuery(the$con, "SELECT count(*) FROM positions.postable")
 
       ##Get rowsToDelete
       nRowsDeleted <- nRowsBefore - nRowsAfter

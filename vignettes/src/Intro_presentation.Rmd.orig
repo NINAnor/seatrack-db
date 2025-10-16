@@ -10,7 +10,8 @@ output:
     incremental: FALSE
     toc: FALSE
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Intro presentation}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEngine{R.rsp::asis}
   %\VignetteEncoding{UTF-8}
 ---
@@ -73,7 +74,7 @@ cat("\\scriptsize")
 
 Install:
 ```{r, eval = F}
-devtools::install_github("NINAnor/seatrack-db/seatrackR", 
+devtools::install_github("NINAnor/seatrack-db", 
                          build_vignettes = True)
 ```
 * When in trouble, update the package first and restart R. If the problem persists, notify jens.astrom@nina.no.
@@ -91,7 +92,7 @@ cat("\\scriptsize")
     - seatrack_metadata_writer (can alter lookup-tables)
 
 ```{r}
-require(seatrackR)
+require(seatrackRdb)
 connectSeatrack(Username = "testreader", 
                 Password = "testreader")
 ```
@@ -117,7 +118,7 @@ cat("\\fvset{fontsize=\\tiny}")
 * The `connectSeatrack` function creates a `DBI` connection called `con`. You can use this with the `DBI`, `dplyr`, `sf` packages.
 * An example of using R's ordinary functions, reading an entire table:
 ```{r}
-loggers <- dbReadTable(con, Id(schema = "loggers", table = "logger_info"))
+loggers <- dbReadTable(the$con, Id(schema = "loggers", table = "logger_info"))
 head(loggers)
 ```
 
@@ -132,7 +133,7 @@ Writing custom SQL queries in the standard R way.
 ```{r}
 LOTEKLoggersQ <- "SELECT * FROM loggers.logger_info WHERE producer = 'LOTEK'"
 
-LOTEKLoggers <- dbGetQuery(con, LOTEKLoggersQ)
+LOTEKLoggers <- dbGetQuery(the$con, LOTEKLoggersQ)
 head(LOTEKLoggers)
 ```
 
@@ -146,7 +147,7 @@ cat("\\fvset{fontsize=\\tiny}")
 Simple operations like this could also be done using dplyr/dbplyr. The filtering here actually happens on the database side, but you can specify it using dplyr commands in R.
 
 ```{r}
-BASLoggers <- dbReadTable(con, Id(schema = "loggers", table = "logger_info")) %>% 
+BASLoggers <- dbReadTable(the$con, Id(schema = "loggers", table = "logger_info")) %>% 
   filter(producer == 'BAS')
 
 head(BASLoggers)
@@ -163,8 +164,8 @@ Dplyr can also do joins using "dbplyr". A silly example:
 
 ```{r}
 require(dbplyr)
-status <- tbl(con, in_schema("individuals", "individ_status"))
-loggers <- tbl(con, in_schema("loggers", "logger_info"))
+status <- tbl(the$con, in_schema("individuals", "individ_status"))
+loggers <- tbl(the$con, in_schema("loggers", "logger_info"))
 
 loggerEggs <- status %>% 
   inner_join(loggers, by = c("logger_id" = "logger_id")) %>% 

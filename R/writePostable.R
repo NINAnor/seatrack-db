@@ -33,24 +33,24 @@ writePostable <- function(positionData){
   nRowsToImport <- sum(unlist(lapply(positionData, nrow)))
 
   # nRowsBefore <- DBI::dbWithTransaction(
-  #   con,
+  #   the$con,
   #   {
-  #     DBI::dbGetQuery(con, "SELECT count(*) FROM positions.postable")
+  #     DBI::dbGetQuery(the$con, "SELECT count(*) FROM positions.postable")
   #   }
   # )
 
   DBI::dbWithTransaction(
-    con,
+    the$con,
     {
-      nRowsBefore <- DBI::dbGetQuery(con, "SELECT count(*) FROM positions.postable")
-      DBI::dbSendQuery(con, "SET search_path TO positions, public")
+      nRowsBefore <- DBI::dbGetQuery(the$con, "SELECT count(*) FROM positions.postable")
+      DBI::dbSendQuery(the$con, "SET search_path TO positions, public")
 
       for(i in 1:length(positionData)){
-        dbWriteTable(con, "postable", positionData[[i]], row.names=F, append=T)
+        dbWriteTable(the$con, "postable", positionData[[i]], row.names = F, append = T)
       }
 
 
-      nRowsAfter <- DBI::dbGetQuery(con, "SELECT count(*) FROM positions.postable")
+      nRowsAfter <- DBI::dbGetQuery(the$con, "SELECT count(*) FROM positions.postable")
 
       nRowsImported <- nRowsAfter - nRowsBefore
 

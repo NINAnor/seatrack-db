@@ -14,7 +14,7 @@
 getRingHistory <- function(asTibble = F){
   checkCon()
 
-  res <- dplyr::tbl(con, dbplyr::in_schema("individuals", "ring_history"))  %>% select(-id)
+  res <- dplyr::tbl(the$con, dbplyr::in_schema("individuals", "ring_history")) %>% select(-id)
 
   if(asTibble){
     res <- res  %>% dplyr::collect()
