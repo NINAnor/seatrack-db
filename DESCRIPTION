@@ -17,14 +17,15 @@ Suggests:
 	tidyverse,
   	R.rsp
 Imports:
-  	DBI,
-  	RPostgres,
-  	ggplot2,
-  	tibble,
-  	dbplyr,
-  	readr,
-  	lubridate,
-	dplyr
+    DBI,
+    RPostgres,
+    ggplot2,
+    tibble,
+    dbplyr,
+    readr,
+    lubridate,
+    dplyr,
+    glue
 VignetteBuilder:
 	knitr
 URL: https://ninanor.github.io/seatrack-db/

@@ -14,18 +14,18 @@
 #' }
 #'
 
-changeSeatrackPassword <- function(password = NULL){
+changeSeatrackPassword <- function(password){
 
   checkCon()
 
   current_user <- DBI::dbGetQuery(the$con, "SELECT current_user")
 
-  alterQuery <- paste0("ALTER USER ", current_user, " WITH PASSWORD '", password, "';")
+  alterQuery <- glue("ALTER USER '{current_user}' WITH PASSWORD '{password}'")
 
   mess <- DBI::dbExecute(the$con, alterQuery)
 
   disconnectSeatrack()
 
-  return("Password changed, you need to connect again using connectSeatrack()")
+  print("Password changed, you need to connect again using connectSeatrack()")
 
 }

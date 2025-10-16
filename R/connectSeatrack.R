@@ -21,20 +21,21 @@
 #' DBI::dbDisconnect(con)
 #' }
 
-connectSeatrack <- function(user_name = NULL,
-                            password = NULL,
+connectSeatrack <- function(user_name = NA,
+                            password = NA,
                             host = "seatrack.nina.no",
                             dbname = "seatrack",
                             ...) {
 
 
-  if(is.null(user_name)){
-    user_name <- Sys.getenv("SEATRACK_DB_USER", NULL)
+  if(is.na(user_name)){
+    user_name <- Sys.getenv("SEATRACK_DB_USER", NA)
   }
-  if(is.null(password)){
-    password <- Sys.getenv("SEATRACK_DB_USER", NULL)
+  if(is.na(password)){
+    password <- Sys.getenv("SEATRACK_DB_USER", NA)
   }
-  if(is.null(user_name) || is.null(password)){
+  if(is.na(user_name) || is.na(password)){
+    print("No existing credentials found. Please enter your credentials. They will be stored in this project's .renviron for future use")
     set_credentials_renviron()
   }
 
@@ -43,8 +44,8 @@ connectSeatrack <- function(user_name = NULL,
   tmp <- DBI::dbConnect(RPostgres::Postgres(),
                         host = host,
                         dbname = dbname,
-                        user = Username,
-                        password = Password,
+                        user = user_name,
+                        password = password,
                         ...)
 
   assign("con", tmp, the)

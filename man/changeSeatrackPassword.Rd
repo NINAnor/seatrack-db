@@ -4,7 +4,7 @@
 \alias{changeSeatrackPassword}
 \title{changeSeatrackPassword}
 \usage{
-changeSeatrackPassword(password = NULL)
+changeSeatrackPassword(password)
 }
 \arguments{
 \item{password}{Your new password (character string).}

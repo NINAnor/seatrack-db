@@ -6,6 +6,9 @@
 \usage{
 getSeatrackConnection()
 }
+\value{
+DBI connection object
+}
 \description{
 Utility function to access the seatrack db connection
 }

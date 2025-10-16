@@ -44,11 +44,15 @@ set_credentials_renviron <- function(user_name = NULL, password = NULL) {
             # add git ignore file
             git_ignore_lines <- c()
         } else {
-            # Exit
+            # Exit early
             return()
         }
     }
-    print("Adding .Renviron to .gitignore")
-    git_ignore_lines <- c(git_ignore_lines, ".Renviron")
-    writeLines(unique(git_ignore_lines), ".gitignore")
+
+    if (!".Renviron" %in% git_ignore_lines) {
+        print("Adding .Renviron to .gitignore")
+        git_ignore_lines <- c(git_ignore_lines, )
+        writeLines(unique(git_ignore_lines), ".gitignore")
+    }
+
 }

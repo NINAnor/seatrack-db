@@ -5,44 +5,39 @@
 \title{Connect to seatrack database}
 \usage{
 connectSeatrack(
-  Username = "testreader",
-  Password = "testreader",
+  user_name = NA,
+  password = NA,
   host = "seatrack.nina.no",
   dbname = "seatrack",
-  bigint = "integer",
   ...
 )
 }
 \arguments{
-\item{Username}{Character. Default = seatrack_reader}
-
-\item{Password}{Character.}
-
 \item{host}{Character. The host of the database. For testing purposes. There should be no need for the user to change this.}
 
 \item{dbname}{Character. Name of database, for testing purposes. Default is "seatrack" which is the production database.}
+
+\item{Username}{Character. If not provided, first attempts to check environmenta variables then calls set_credentials_renviron()}
+
+\item{Password}{Character. If not provided, first attempts to check environmenta variables then calls set_credentials_renviron()}
 }
 \value{
 No return, a connection to the database is opened
 }
 \description{
-This function establishes a connection to the Seatrack database. It is a simple convenience function that uses the
-packages DBI and RPostgres (available from github via devtools::install_github("rstats-db/DBI") and
-devtools::install_github("rstats-db/DBI"). Note that connections are only accepted from a limited IP-adresses.
+This function establishes a connection to the Seatrack database. Note that connections are only accepted from limited IP-adresses.
+Ideally, credentials should first be set using \code{set_credentials_renviron()}. This should only have to be done once per project.
+After this, credentials will be loaded automatically.
 }
-\note{
-The password is stored within the R session in a somewhat hidden environment, to be used in the interface with the FTP server.
-It is therefore not saved in the session if you do that when closing R. The password is not stored in cleartext within the database either, and the admins have no way of seeing it.
-The handshake between R and the FTP server is encrypted, as well as the actual data transfers.
-However, it is difficult to guarantee that it is totally safe from all eventualities.
-For example, I don't know what would happen if R would crash and store something in a crash logfile. So best practice would be to use a separate password for
-Seatrack, that you don't share with other sites or applications.
+\details{
+The function opens a connection to the database, which other functions in seatrackRdb will use.
+If a user wants to access the connection in their own R environment so as to write their own queries, they can do so using \code{getSeatrackConnection()}
 }
 \examples{
 \dontrun{
-connectSeatrack(Username = "testreader", Password = "testreader")
+connectSeatrack()
 con <- getSeatrackConnection()
-DBI::dbGetQuery(the$con, "SELECT * FROM loggers.logging_session LIMIT 10")
+DBI::dbGetQuery(con, "SELECT * FROM loggers.logging_session LIMIT 10")
 DBI::dbDisconnect(con)
 }
 }
